@@ -1,0 +1,28 @@
+class CountryNames:
+    COUNTRY_AUSTRIA = 'Austria'
+    COUNTRY_BELGIUM = 'Belgium'
+    COUNTRY_BAH = 'Bosnia and Herzegovina'
+    COUNTRY_BULGARIA = 'Bulgaria'
+    COUNTRY_CROATIA = 'Croatia'
+    COUNTRY_DENMARK = 'Denmark'
+    COUNTRY_ENGLAND = 'England'
+    COUNTRY_FRANCE = 'France'
+    COUNTRY_GERMANY = 'Germany'
+    COUNTRY_GREECE = 'Greece'
+    COUNTRY_HUNGARY = 'Hungary'
+    COUNTRY_ITALY = 'Italy'
+    COUNTRY_LATVIA = 'Latvia'
+    COUNTRY_LITHUANIA = 'Lithuania'
+    COUNTRY_NETHERLANDS = 'Netherlands'
+    COUNTRY_POLAND = 'Poland'
+    COUNTRY_PORTUGAL = 'Portugal'
+    COUNTRY_ROMANIA = 'Romania'
+    COUNTRY_RUSSIA = 'Russia'
+    COUNTRY_SPAIN = 'Spain'
+    COUNTRY_SWEDEN = 'Sweden'
+    COUNTRY_SWITZERLAND = 'Switzerland'
+    COUNTRY_TURKEY = 'Turkey'
+    COUNTRY_UKRAINE = 'Ukraine'
+
+    def __new__(cls, *args, **kwargs):
+        raise TypeError(f"{cls.__name__} is a static class and cannot be instantiated.")
