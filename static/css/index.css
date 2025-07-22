@@ -1,0 +1,222 @@
+:root {
+    --color-background: #fdf6e3;
+    --color-foreground: #000000;
+
+    --color-container: white;
+    --color-container-border: rgba(0, 0, 0, 0.25);
+
+    --button-background: #e0cfa0;
+    --button-background-hover: #d5bb8d;
+    --button-border: #a08855;
+    --button-foreground: #3e2f1c;
+
+    --font-main: 'Georgia', serif;
+    --font-footer: 'Verdana';
+
+    --footer-background: #e0e0e0;
+    --footer-border: #d0d0d0;
+
+    --input-border: #a08855;
+    --input-border-focus: #fff9e8;
+    --input-border-hover: #a88c66;
+
+    --shadow-container: rgba(0, 0, 0, 0.15);
+    --shadow-input-focus: rgba(153, 121, 80, 0.4);
+}
+
+body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-main);
+    margin: 0;
+}
+
+.container-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.special-header {
+    background-color: var(--footer-background);
+    border-bottom: 1px solid var(--footer-border);
+    display: flex;
+    font-family: var(--font-footer);
+    justify-content: flex-end;
+    margin: 0;
+    padding: 8px 16px;
+}
+
+.container {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.container-inner {
+    background-color: var(--color-container);
+    border: 1px solid var(--color-container-border);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px var(--shadow-container);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 48px;
+}
+
+/* -----------------------------------------------------------------------------
+ * --- HEADER ---
+ * -------------------------------------------------------------------------- */
+
+.header {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.header h1, h2 {
+    margin: 0;
+    padding: 0;
+}
+
+/* -----------------------------------------------------------------------------
+ * --- CONTENT ---
+ * -------------------------------------------------------------------------- */
+
+.content {
+    align-items: stretch;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+}
+
+/* --- CONTENT TABLE --- */
+
+.content table {
+    border-collapse: collapse;
+    background: none;
+    width: 100%
+}
+
+.content td {
+    background: none;
+    border: none;
+    font-size: 16px;
+    margin: 0;
+    padding: 0.25rem 0;
+    text-align: center;
+}
+
+.content td:first-child {
+    width: 48px;
+
+}
+
+/* --- CONTENT INPUT --- */
+
+.content input {
+    align: stretch;
+    border: 1px solid var(--input-border);
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+    padding: 8px;
+    text-align: left;
+    width: 100%;
+}
+
+.content input:hover {
+    border-color: var(--input-border-hover);
+
+}
+
+.content input:focus {
+    background-color: var(--input-border-focus);
+    box-shadow: 0 0 4px var(--shadow-input-focus);
+    outline: none;
+}
+
+/* --- CONTENT BUTTONS --- */
+
+.button-group {
+    align-self: center;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+}
+
+.button-group button {
+    background-color: var(--button-background);
+    border: 1px solid var(--button-border);
+    border-radius: 4px;
+    color: var(--button-foreground);
+    cursor: pointer;
+    font-weight: bold;
+    margin: 0;
+    min-width: 128px;
+    padding: 10px 16px;
+}
+
+.button-group button:hover {
+    background-color: var(--button-background-hover);
+
+}
+
+/* -----------------------------------------------------------------------------
+ * --- FOOTER ---
+ * -------------------------------------------------------------------------- */
+
+.footer {
+    background-color: var(--footer-background);
+    border-top: 1px solid var(--footer-border);
+    font-family: var(--font-footer);
+    font-size: 0.6rem;
+    line-height: 1.5;
+    margin: 0;
+    padding: 8px 16px;
+}
+
+
+
+@media (max-width: 768px) {
+
+    .container {
+        align-items: stretch;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .container-inner {
+        align-items: center;
+        background-color: var(--color-container);
+        border-top: 1px solid var(--color-container-border);
+        border-bottom: 1px solid var(--color-container-border);
+        border-left: none;
+        border-right: none;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 32px;
+    }
+
+    .header h1 {
+        font-size: 24px;
+    }
+
+    .header h2 {
+        font-size: 18px;
+    }
+
+}

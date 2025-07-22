@@ -39,6 +39,15 @@ class RouteWrapper:
     def accept(self):
         self._is_new = False
 
+    def equal_cities(self, city_a: str, city_b: str) -> bool:
+        if self.city_a == city_a and self.city_b == city_b:
+            return True
+
+        if self.city_a == city_b and self.city_b == city_a:
+            return True
+
+        return False
+
     def get_points(self) -> List[Point]:
         return self._generated_route.get_all_points()
 

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{ header_data.title }} - {{ header_data.subtitle }}</title>
+        <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    </head>
+
+    <body>
+        <div class="container-wrapper">
+            <div class="special-header">
+                <form method="POST" action="/submit">
+                    <select name="color" id="color" onchange="this.form.submit()">
+                        <option value="">-- wybierz --</option>
+                        <option value="red">Czerwony</option>
+                        <option value="green">Zielony</option>
+                        <option value="blue">Niebieski</option>
+                    </select>
+                </form>
+            </div>
+
+            <div class="container">
+                <div class="container-inner">
+                    <div class="header">
+                        <h1>{{ header_data.title }}</h1>
+                        <h2>{{ header_data.subtitle }}</h2>
+                    </div>
+
+                    <form method="post" class="content">
+                        <table>
+                            <tr>
+                                <td>👤</td>
+                                <td><input type="text" name="nickname" placeholder="Nazwa gracza" required /></td>
+                            </tr>
+                            <tr>
+                                <td>🎲</td>
+                                <td><input type="text" name="game_name" placeholder="Nazwa gry" required /></td>
+                            </tr>
+                        </table>
+
+                        <div class="button-group">
+                            <button formaction="/create_game" type="submit">Stwórz grę</button>
+                            <button formaction="/join_game" type="submit">Dołącz do gry</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="footer">
+                <p>{{ footer_data.title }}<br/>{{ footer_data.version }}<br/>{{ footer_data.copyright }}<br/>
+                {{ footer_data.licence }}</p>
+                <p>{{ footer_data.legal_notice }}</p>
+            </div>
+        </div>
+    </body>
+</html>

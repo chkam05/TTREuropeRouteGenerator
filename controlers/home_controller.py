@@ -5,13 +5,13 @@ from interactors.home_interactors import create_game, join_game
 from models.data_container import DataContainer
 from static.data_keys import DataKeys
 from static.http_methods import HttpMethods
+from static.redirections import Redirections
 from static.static_info import StaticInfo
 from utils.request_data_manager import RequestDataManager
 
 
 class HomeController(BaseController):
     NAME = 'home'
-    REDIRECTION = 'home.index'
     TEMPLATE = 'index.html'
     URL_PREFIX = '/'
 
@@ -31,10 +31,11 @@ class HomeController(BaseController):
 
     @staticmethod
     def _redirect_game():
-        return redirect(url_for(f''))
+        return redirect(url_for(Redirections.GAME))
 
-    def _redirect_itself(self):
-        return redirect(url_for(self.REDIRECTION))
+    @staticmethod
+    def _redirect_itself():
+        return redirect(url_for(Redirections.HOME))
 
     # endregion
 
@@ -55,10 +56,10 @@ class HomeController(BaseController):
         if result.success:
             session[DataKeys.SESSION_GAME_NAME_KEY] = result.get(DataKeys.SESSION_GAME_NAME_KEY)
             session[DataKeys.SESSION_NICKNAME_KEY] = result.get(DataKeys.SESSION_NICKNAME_KEY)
-            self._redirect_game()
+            return self._redirect_game()
         else:
             session[DataKeys.SESSION_ERROR_MESSAGE_KEY] = result.error
-            self._redirect_itself()
+            return self._redirect_itself()
 
     def join_game(self):
         game_name = RequestDataManager.get_str(DataKeys.REQUEST_GAME_NAME_KEY)
@@ -69,7 +70,7 @@ class HomeController(BaseController):
         if result.success:
             session[DataKeys.SESSION_GAME_NAME_KEY] = result.get(DataKeys.SESSION_GAME_NAME_KEY)
             session[DataKeys.SESSION_NICKNAME_KEY] = result.get(DataKeys.SESSION_NICKNAME_KEY)
-            self._redirect_game()
+            return self._redirect_game()
         else:
             session[DataKeys.SESSION_ERROR_MESSAGE_KEY] = result.error
-            self._redirect_itself()
+            return self._redirect_itself()

@@ -8,11 +8,15 @@ class Translations:
 
     ERRORS = {
         LanguageKeys.LANG_EN_US: {
+            ErrorKeys.ERROR_END_GAME_PERMISSIONS: 'Insufficient permissions to end the game.',
+            ErrorKeys.ERROR_GAME_ENDED: 'The \"{0}\" game has ended.',
             ErrorKeys.ERROR_GAME_EXISTS: 'Game with name \"{0}\" already exists.',
             ErrorKeys.ERROR_GAME_NOT_EXISTS: 'Game with name \"{0}\" does not exists.',
             ErrorKeys.ERROR_MISSING_DATA: 'Application data container not loaded.',
             ErrorKeys.ERROR_MISSING_GAME_NAME: 'Missing \"Game Name\".',
-            ErrorKeys.ERROR_MISSING_NICKNAME: 'Missing \"Nickname\".'
+            ErrorKeys.ERROR_MISSING_NICKNAME: 'Missing \"Nickname\".',
+            ErrorKeys.ERROR_PLAYER_NOT_EXISTS: 'Player with nickname \"{0}\" does not exists.',
+            ErrorKeys.ERROR_SESSION_DATA_MISSING: 'Missing or corrupt session data: \"{0}\"'
         }
     }
 
