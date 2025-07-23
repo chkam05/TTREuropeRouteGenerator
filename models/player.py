@@ -8,11 +8,11 @@ class Player:
 
     # region --- LOAD & SAVE ---
 
-    @staticmethod
-    def from_dict(data: dict) -> 'Player':
-        return Player(
-            nickname=data.get(Player.FIELD_NICKNAME_KEY),
-            md5_password=data.get(Player.FIELD_MD5_PASSWORD_KEY)
+    @classmethod
+    def from_dict(cls, data: dict) -> 'Player':
+        return cls(
+            nickname=data.get(cls.FIELD_NICKNAME_KEY),
+            md5_password=data.get(cls.FIELD_MD5_PASSWORD_KEY)
         )
 
     def to_dict(self) -> dict:

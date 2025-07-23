@@ -22,8 +22,3 @@ class RequestDataManager:
     def get_upper_str(attrib_key: str, default: Optional[str] = None) -> Optional[str]:
         value = request.form.get(attrib_key, default)
         return str(value).upper() if value else None
-
-    @staticmethod
-    def set_error_message(error_message: str):
-        if error_message:
-            session[DataKeys.SESSION_ERROR_MESSAGE_KEY] = error_message

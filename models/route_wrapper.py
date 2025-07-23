@@ -53,13 +53,13 @@ class RouteWrapper:
 
     # region --- LOAD & SAVE ---
 
-    @staticmethod
-    def from_dict(data: dict) -> 'RouteWrapper':
-        generated_route = data.get(RouteWrapper.FIELD_GENERATED_ROUTE_KEY)
+    @classmethod
+    def from_dict(cls, data: dict) -> 'RouteWrapper':
+        generated_route = data.get(cls.FIELD_GENERATED_ROUTE_KEY)
 
-        return RouteWrapper(
+        return cls(
             generated_route=GenRoute.from_dict(generated_route),
-            is_new=data.get(RouteWrapper.FIELD_IS_NEW_KEY)
+            is_new=data.get(cls.FIELD_IS_NEW_KEY)
         )
 
     def to_dict(self) -> dict:

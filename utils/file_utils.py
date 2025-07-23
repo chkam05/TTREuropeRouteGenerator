@@ -22,8 +22,8 @@ class FileUtils:
     def get_file_extension(file_path: str) -> str:
         return os.path.splitext(file_path)[1].lower()
 
-    @staticmethod
-    def is_valid_file_path(path: str) -> bool:
+    @classmethod
+    def is_valid_file_path(cls, path: str) -> bool:
         # Ends with separator = catalog not file
         if not path or path.endswith(os.path.sep):
             return False
@@ -35,7 +35,7 @@ class FileUtils:
             return False
 
         # Illegal characters in file name (mainly for Windows)
-        for char in FileUtils._INVALID_CHARACTERS:
+        for char in cls._INVALID_CHARACTERS:
             if char in filename:
                 return False
 
@@ -54,18 +54,18 @@ class FileUtils:
         with open(file_path, 'r', encoding=encoding) as f:
             return f.read()
 
-    @staticmethod
-    def read_json(file_path: str, encoding: str = 'utf-8') -> dict | list:
-        content = FileUtils.read_file(file_path, encoding)
+    @classmethod
+    def read_json(cls, file_path: str, encoding: str = 'utf-8') -> dict | list:
+        content = cls.read_file(file_path, encoding)
         return json.loads(content)
 
-    @staticmethod
-    def save_file(file_path: str, content: str, encoding: str = 'utf-8'):
-        FileUtils.ensure_folder_for_file(file_path)
+    @classmethod
+    def save_file(cls, file_path: str, content: str, encoding: str = 'utf-8'):
+        cls.ensure_folder_for_file(file_path)
         with open(file_path, 'w', encoding=encoding) as f:
             f.write(content)
 
-    @staticmethod
-    def save_json(file_path: str, content: dict | list, encoding: str = 'utf-8'):
+    @classmethod
+    def save_json(cls, file_path: str, content: dict | list, encoding: str = 'utf-8'):
         json_string = json.dumps(content, indent=4, ensure_ascii=False)
-        FileUtils.save_file(file_path, json_string, encoding)
+        cls.save_file(file_path, json_string, encoding)

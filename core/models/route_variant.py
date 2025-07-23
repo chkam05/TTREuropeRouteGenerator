@@ -45,15 +45,15 @@ class RouteVariant:
 
     # region --- LOAD & SAVE ---
 
-    @staticmethod
-    def from_dict(data: dict) -> 'RouteVariant':
-        color_str = data.get(RouteVariant.FIELD_COLOR_KEY, ColorEnum.TRANSPARENT.value)
+    @classmethod
+    def from_dict(cls, data: dict) -> 'RouteVariant':
+        color_str = data.get(cls.FIELD_COLOR_KEY, ColorEnum.TRANSPARENT.value)
 
-        return RouteVariant(
+        return cls(
             color=ColorEnumHelper.from_str(color_str),
-            length=data.get(RouteVariant.FIELD_LENGTH_KEY, 1),
-            locomotives=data.get(RouteVariant.FIELD_LOCOMOTIVES_KEY, 0),
-            defensive=data.get(RouteVariant.FIELD_DEFENSIVE_KEY, False)
+            length=data.get(cls.FIELD_LENGTH_KEY, 1),
+            locomotives=data.get(cls.FIELD_LOCOMOTIVES_KEY, 0),
+            defensive=data.get(cls.FIELD_DEFENSIVE_KEY, False)
         )
 
     def to_dict(self) -> dict:

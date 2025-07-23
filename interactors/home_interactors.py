@@ -9,27 +9,26 @@ from static.language_keys import LanguageKeys
 from static.translations import Translations
 
 
-def _input_check(data_container: DataContainer, game_name: str, nickname: str):
+def _input_check(game_name: str, nickname: str, language: str):
     if not game_name:
-        raise Exception(Translations.get_error(ErrorKeys.ERROR_MISSING_GAME_NAME, data_container.language))
+        raise Exception(Translations.get_error(ErrorKeys.ERROR_MISSING_GAME_NAME, language))
 
     if not nickname:
-        raise Exception(Translations.get_error(ErrorKeys.ERROR_MISSING_NICKNAME, data_container.language))
+        raise Exception(Translations.get_error(ErrorKeys.ERROR_MISSING_NICKNAME, language))
 
 
-def create_game(data_container: DataContainer, game_name: str, nickname: str) -> InteractorResult:
+def create_game(data_container: DataContainer, game_name: str, nickname: str, language: str) -> InteractorResult:
     if data_container is None:
-        return get_data_container_error()
+        return get_data_container_error(language)
 
     try:
-        _input_check(data_container, game_name, nickname)
+        _input_check(game_name, nickname, language)
 
         game_name = game_name.upper()
         nickname = nickname.upper()
 
         if data_container.has_game(game_name):
-            raise Exception(Translations.get_error(
-                ErrorKeys.ERROR_GAME_EXISTS, data_container.language, game_name))
+            raise Exception(Translations.get_error(ErrorKeys.ERROR_GAME_EXISTS, language, game_name))
 
         player = data_container.get_or_create_player(nickname)
         game = data_container.create_game(game_name, player)
@@ -42,19 +41,18 @@ def create_game(data_container: DataContainer, game_name: str, nickname: str) ->
         return InteractorResult(False, error=str(e))
 
 
-def join_game(data_container: DataContainer, game_name: str, nickname: str) -> InteractorResult:
+def join_game(data_container: DataContainer, game_name: str, nickname: str, language: str) -> InteractorResult:
     if data_container is None:
-        return get_data_container_error()
+        return get_data_container_error(language)
 
     try:
-        _input_check(data_container, game_name, nickname)
+        _input_check(game_name, nickname, language)
 
         game_name = game_name.upper()
         nickname = nickname.upper()
 
         if not data_container.has_game(game_name):
-            raise Exception(Translations.get_error(
-                ErrorKeys.ERROR_GAME_NOT_EXISTS, data_container.language, game_name))
+            raise Exception(Translations.get_error(ErrorKeys.ERROR_GAME_NOT_EXISTS, language, game_name))
 
         player = data_container.get_or_create_player(nickname)
         game = data_container.get_game(game_name)

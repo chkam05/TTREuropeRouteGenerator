@@ -37,10 +37,10 @@ class PrintHelper:
             for i in range(max_lines)
         ]
 
-    @staticmethod
-    def print_block(text: str, align: int = 0, max_length: int = 100, print_bottom_line: bool = True):
+    @classmethod
+    def print_block(cls, text: str, align: int = 0, max_length: int = 100, print_bottom_line: bool = True):
         spaces = max_length - (len(text) + 4)
-        PrintHelper._print_border_line(max_length)
+        cls._print_border_line(max_length)
 
         if align <= 0:
             print('| ' + text + ' ' * spaces + ' |')
@@ -52,10 +52,10 @@ class PrintHelper:
             print('| ' + ' ' * spaces + text + ' |')
 
         if print_bottom_line:
-            PrintHelper._print_border_line(max_length)
+            cls._print_border_line(max_length)
 
-    @staticmethod
-    def print_table(headers: List[str], content: List[List[Any]], max_width: int = 100, separator='|'):
+    @classmethod
+    def print_table(cls, headers: List[str], content: List[List[Any]], max_width: int = 100, separator='|'):
         # Convert all cells to string
         rows = [[str(cell) for cell in headers]] + [[str(cell) for cell in row] for row in content]
         num_cols = max(len(row) for row in rows)
@@ -68,7 +68,7 @@ class PrintHelper:
         # Initial column widths based on longest word in each column
         col_widths = [
             max(
-                max(PrintHelper._max_word_len(row[i]) for row in rows),
+                max(cls._max_word_len(row[i]) for row in rows),
                 len(headers[i]) if i < len(headers) else 0
             )
             for i in range(num_cols)
@@ -100,13 +100,13 @@ class PrintHelper:
             i += 1
 
         # Print header
-        PrintHelper._print_separator(col_widths)
-        for line in PrintHelper._wrap_row(rows[0], col_widths):
-            print(f"|{PrintHelper._format_line(line, separator, col_widths)}|")
-        PrintHelper._print_separator(col_widths)
+        cls._print_separator(col_widths)
+        for line in cls._wrap_row(rows[0], col_widths):
+            print(f"|{cls._format_line(line, separator, col_widths)}|")
+        cls._print_separator(col_widths)
 
         # Print rows
         for row in rows[1:]:
-            for line in PrintHelper._wrap_row(row, col_widths):
-                print(f"|{PrintHelper._format_line(line, separator, col_widths)}|")
-        PrintHelper._print_separator(col_widths)
+            for line in cls._wrap_row(row, col_widths):
+                print(f"|{cls._format_line(line, separator, col_widths)}|")
+        cls._print_separator(col_widths)

@@ -16,8 +16,8 @@ class WorldMap:
         self.cities: Dict[str, City] = cities if cities else {}
         self.routes: List[Route] = routes if routes else []
 
-    @staticmethod
-    def create_default() -> 'WorldMap':
+    @classmethod
+    def create_default(cls) -> 'WorldMap':
         cities = {city_name: city for city_name, city in CityNames.CITIES.items()}
         routes = [
             Route(CityNames.get(CityNames.CITY_AMSTERDAM), CityNames.get(CityNames.CITY_BRUXELLES), variants=[
@@ -302,16 +302,16 @@ class WorldMap:
             RouteVariant(ColorEnum.TRANSPARENT, 2)
         ])
         ]
-        return WorldMap(cities, routes)
+        return cls(cities, routes)
 
     # region --- LOAD & SAVE ---
 
-    @staticmethod
-    def from_dict(data: dict) -> 'WorldMap':
-        cities = data.get(WorldMap.FIELD_CITIES_KEY, {})
-        routes = data.get(WorldMap.FIELD_ROUTES_KEY, [])
+    @classmethod
+    def from_dict(cls, data: dict) -> 'WorldMap':
+        cities = data.get(cls.FIELD_CITIES_KEY, {})
+        routes = data.get(cls.FIELD_ROUTES_KEY, [])
 
-        return WorldMap(
+        return cls(
             cities={key: City.from_dict(city) for key, city in cities.items()},
             routes=[Route.from_dict(route) for route in routes]
         )
@@ -322,13 +322,13 @@ class WorldMap:
             self.FIELD_ROUTES_KEY: [route.to_dict() for route in self.routes],
         }
 
-    @staticmethod
-    def load_from_file(file_path: str) -> 'WorldMap':
+    @classmethod
+    def load_from_file(cls, file_path: str) -> 'WorldMap':
         if not FileUtils.file_exists(file_path):
             raise Exception(f'File \"{file_path}\" not found.')
 
         world_map = FileUtils.read_json(file_path)
-        return WorldMap.from_dict(world_map)
+        return cls.from_dict(world_map)
 
     def save_to_file(self, file_path: str):
         if not FileUtils.is_valid_file_path(file_path):

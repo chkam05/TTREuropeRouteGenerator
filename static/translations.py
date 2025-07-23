@@ -1,5 +1,3 @@
-from typing import Optional
-
 from static.error_keys import ErrorKeys
 from static.language_keys import LanguageKeys
 
@@ -17,14 +15,10 @@ class Translations:
             ErrorKeys.ERROR_MISSING_NICKNAME: 'Missing \"Nickname\".',
             ErrorKeys.ERROR_PLAYER_NOT_EXISTS: 'Player with nickname \"{0}\" does not exists.',
             ErrorKeys.ERROR_SESSION_DATA_MISSING: 'Missing or corrupt session data: \"{0}\"'
-        }
-    }
-
-    LANGUAGES = {
-        LanguageKeys.LANG_EN_US: {
-            LanguageKeys.LANG_EN_US: 'English United-States',
-            LanguageKeys.LANG_PL: 'Polish'
         },
+        LanguageKeys.LANG_PL: {
+
+        }
     }
 
     def __new__(cls, *args, **kwargs):
@@ -40,14 +34,8 @@ class Translations:
 
         return template
 
-    @staticmethod
-    def get_error(error_key: str, lang_key: str, *args):
-        translations = Translations.ERRORS.get(lang_key, {})
+    @classmethod
+    def get_error(cls, error_key: str, lang_key: str, *args):
+        translations = cls.ERRORS.get(lang_key, {})
         error_message = translations.get(error_key, error_key)
-        return Translations._format(error_message, *args)
-
-    @staticmethod
-    def get_language(language_key: str, lang_key: str):
-        translations = Translations.LANGUAGES.get(lang_key, {})
-        language = translations.get(language_key, language_key)
-        return language
+        return cls._format(error_message, *args)

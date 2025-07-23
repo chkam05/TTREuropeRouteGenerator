@@ -25,13 +25,13 @@ class Game:
 
     # region --- LOAD & SAVE ---
 
-    @staticmethod
-    def from_dict(data: dict) -> 'Game':
-        routes_per_player = data.get(Game.FIELD_ROUTES_PER_PLAYER_KEY, {})
+    @classmethod
+    def from_dict(cls, data: dict) -> 'Game':
+        routes_per_player = data.get(cls.FIELD_ROUTES_PER_PLAYER_KEY, {})
 
-        return Game(
-            name=data.get(Game.FIELD_NAME_KEY),
-            host=data.get(Game.FILED_HOST_KEY, 'ADMIN'),
+        return cls(
+            name=data.get(cls.FIELD_NAME_KEY),
+            host=data.get(cls.FILED_HOST_KEY, 'ADMIN'),
             routes_per_player={player: [RouteWrapper.from_dict(r) for r in routes]
                                for player, routes in routes_per_player.items()}
         )

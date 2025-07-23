@@ -20,7 +20,6 @@
 
     --input-border: #a08855;
     --input-border-focus: #fff9e8;
-    --input-border-hover: #a88c66;
 
     --shadow-container: rgba(0, 0, 0, 0.15);
     --shadow-input-focus: rgba(153, 121, 80, 0.4);
@@ -53,6 +52,7 @@ body {
 }
 
 .container-inner {
+    align-items: center;
     background-color: var(--color-container);
     border: 1px solid var(--color-container-border);
     border-radius: 12px;
@@ -60,7 +60,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    padding: 48px;
 }
 
 /* -----------------------------------------------------------------------------
@@ -108,7 +107,7 @@ select:focus {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    margin: 0;
+    margin: 48px 48px 0 48px;
     padding: 0;
     text-align: center;
     width: 100%;
@@ -123,72 +122,44 @@ select:focus {
  * --- CONTENT ---
  * -------------------------------------------------------------------------- */
 
-.content {
-    align-items: stretch;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    width: 100%;
+.game_info {
+    align-self: stretch;
+    background: var(--footer-background);
+    border-top: 1px solid var(--footer-border);
+    border-bottom: 1px solid var(--footer-border);
+    padding: 8px;
 }
 
-/* --- CONTENT TABLE --- */
-
-.content table {
+.game_info table {
     border-collapse: collapse;
     background: none;
-    width: 100%
 }
 
-.content td {
+.game_info td {
     background: none;
     border: none;
     font-size: 16px;
     margin: 0;
-    padding: 0.25rem 0;
-    text-align: center;
-}
-
-.content td:first-child {
-    width: 48px;
-
-}
-
-/* --- CONTENT INPUT --- */
-
-.content input {
-    align: stretch;
-    border: 1px solid var(--input-border);
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-size: 16px;
-    padding: 8px;
+    padding: 0.25rem 0.4rem;
     text-align: left;
-    width: 100%;
 }
 
-.content input:hover {
-    border-color: var(--input-border-hover);
-
-}
-
-.content input:focus {
-    background-color: var(--input-border-focus);
-    box-shadow: 0 0 4px var(--shadow-input-focus);
-    outline: none;
-}
-
-/* --- CONTENT BUTTONS --- */
-
-.button-group {
-    align-self: center;
+.content {
     display: flex;
-    flex-direction: row;
-    gap: 0.5rem;
-    margin: 0;
-    padding: 0;
+    flex-direction: column;
+    gap: 2rem;
+    margin: 0 48px 48px 48px;
 }
 
-.button-group button {
+.content-buttons {
+    align-items: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.content-buttons button {
     background-color: var(--button-background);
     border: 1px solid var(--button-border);
     border-radius: 4px;
@@ -198,14 +169,15 @@ select:focus {
     margin: 0;
     min-width: 128px;
     padding: 10px 16px;
+    width: 100%;
 }
 
-.button-group button:hover {
+.content-buttons button:hover {
     background-color: var(--button-background-hover);
 
 }
 
-/* -----------------------------------------------------------------------------
+ /* -----------------------------------------------------------------------------
  * --- FOOTER ---
  * -------------------------------------------------------------------------- */
 

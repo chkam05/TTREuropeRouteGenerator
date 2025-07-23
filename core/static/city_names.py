@@ -122,8 +122,8 @@ class CityNames:
     def __new__(cls, *args, **kwargs):
         raise TypeError(f"{cls.__name__} is a static class and cannot be instantiated.")
 
-    @staticmethod
-    def get(city_name: str) -> Optional[City]:
-        if city_name in CityNames.CITIES:
-            return CityNames.CITIES[city_name]
+    @classmethod
+    def get(cls, city_name: str) -> Optional[City]:
+        if city_name in cls.CITIES:
+            return cls.CITIES[city_name]
         return None

@@ -49,28 +49,28 @@ class SshKeysReader:
 
         return ''.join(public_key_lines), ''.join(private_key_lines)
 
-    @staticmethod
-    def read_ssh_public_key(file_path: str) -> Optional[SshKeys]:
+    @classmethod
+    def read_ssh_public_key(cls, file_path: str) -> Optional[SshKeys]:
         file_content = FileUtils.read_file(file_path)
 
         if not file_content:
             return None
 
-        public_key = SshKeysReader._read_ssh_public_key(file_content)
+        public_key = cls._read_ssh_public_key(file_content)
 
         if not public_key:
             return None
 
         return SshKeys(public_key)
 
-    @staticmethod
-    def read_ssh_private_key(file_path: str) -> Optional[SshKeys]:
+    @classmethod
+    def read_ssh_private_key(cls, file_path: str) -> Optional[SshKeys]:
         file_content = FileUtils.read_file(file_path)
 
         if not file_content:
             return None
 
-        public_key, private_key = SshKeysReader._read_ssh_private_key(file_content)
+        public_key, private_key = cls._read_ssh_private_key(file_content)
 
         if not public_key and not private_key:
             return None

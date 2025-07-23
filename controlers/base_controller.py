@@ -6,11 +6,18 @@ from flask import Blueprint, session
 from models.data_container import DataContainer
 from static.data_keys import DataKeys
 from static.language_keys import LanguageKeys
+from utils.cookies.cookies_manager import CookiesManager
 
 
 class BaseController(ABC):
 
-    def __init__(self, controller_name: str, import_name: str, url_prefix: str, data_container: DataContainer):
+    def __init__(self,
+                 controller_name: str,
+                 import_name: str,
+                 url_prefix: str,
+                 cookies_manager: CookiesManager,
+                 data_container: DataContainer):
+        self._cookies_manager = cookies_manager
         self._data_container = data_container
         self._blueprint = Blueprint(controller_name, import_name, url_prefix=url_prefix)
         self._register_routes()
@@ -48,6 +55,5 @@ class BaseController(ABC):
         return None
 
     def _get_language(self):
-        return self._data_container.language \
-            if self._data_container and LanguageKeys.is_language(self._data_container.language) \
-            else LanguageKeys.LANG_EN_US
+        session_id, cookies_data = self._cookies_manager.get_cookies_data()
+        return cookies_data.language

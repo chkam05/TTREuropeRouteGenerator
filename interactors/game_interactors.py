@@ -1,51 +1,45 @@
-from typing import Optional
-
 from interactors.base_interactor import get_data_container_error
 from interactors.models.interactor_result import InteractorResult
 from models.data_container import DataContainer
-from models.game import Game
-from models.player import Player
 from static.data_keys import DataKeys
 from static.error_keys import ErrorKeys
-from static.language_keys import LanguageKeys
 from static.translations import Translations
 
 
-def _input_check(data_container: DataContainer, game_name: str, nickname: str):
+def _input_check(game_name: str, nickname: str, language: str):
     if not game_name:
         raise Exception(Translations.get_error(
-            ErrorKeys.ERROR_SESSION_DATA_MISSING, data_container.language, DataKeys.SESSION_GAME_NAME_KEY))
+            ErrorKeys.ERROR_SESSION_DATA_MISSING, language, DataKeys.SESSION_GAME_NAME_KEY))
 
     if not nickname:
         raise Exception(Translations.get_error(
-            ErrorKeys.ERROR_SESSION_DATA_MISSING, data_container.language, DataKeys.SESSION_NICKNAME_KEY))
+            ErrorKeys.ERROR_SESSION_DATA_MISSING, language, DataKeys.SESSION_NICKNAME_KEY))
 
 
-def _game_data_check(data_container: DataContainer, game_data: Optional[Game], player: Optional[Player]):
-    if not game_data:
+def _game_data_check(data_container: DataContainer, game_name: str, nickname: str, language: str):
+    if not data_container.has_game(game_name):
         raise Exception(Translations.get_error(
-            ErrorKeys.ERROR_GAME_NOT_EXISTS, data_container.language, game_name))
+            ErrorKeys.ERROR_GAME_NOT_EXISTS, language, game_name))
 
-    if not player:
+    if not data_container.has_player(nickname):
         raise Exception(Translations.get_error(
-            ErrorKeys.ERROR_PLAYER_NOT_EXISTS, data_container.language, nickname))
+            ErrorKeys.ERROR_PLAYER_NOT_EXISTS, language, nickname))
 
 
-def game(data_container: DataContainer, game_name: str, nickname: str) -> InteractorResult:
+def game(data_container: DataContainer, game_name: str, nickname: str, language: str) -> InteractorResult:
     if data_container is None:
-        return get_data_container_error()
+        return get_data_container_error(language)
 
     try:
-        _input_check(data_container, game_name, nickname)
+        _input_check(game_name, nickname, language)
 
         game_name = game_name.upper()
         nickname = nickname.upper()
 
+        _game_data_check(data_container, game_name, nickname, language)
+
         game_data = data_container.get_game(game_name)
         player = data_container.get_player(nickname)
-
-        _game_data_check(data_container, game_data, player)
-
         player_routes = game_data.get_player_routes(player.nickname)
 
         return InteractorResult(True, {
@@ -57,20 +51,20 @@ def game(data_container: DataContainer, game_name: str, nickname: str) -> Intera
         return InteractorResult(False, error=str(e))
 
 
-def accept_routes(data_container: DataContainer, game_name: str, nickname: str) -> InteractorResult:
+def accept_routes(data_container: DataContainer, game_name: str, nickname: str, language: str) -> InteractorResult:
     if data_container is None:
-        return get_data_container_error()
+        return get_data_container_error(language)
 
     try:
-        _input_check(data_container, game_name, nickname)
+        _input_check(game_name, nickname, language)
 
         game_name = game_name.upper()
         nickname = nickname.upper()
 
+        _game_data_check(data_container, game_name, nickname, language)
+
         game_data = data_container.get_game(game_name)
         player = data_container.get_player(nickname)
-
-        _game_data_check(data_container, game_data, player)
 
         game_data.accept_routes(player.nickname)
 
@@ -79,20 +73,20 @@ def accept_routes(data_container: DataContainer, game_name: str, nickname: str) 
         return InteractorResult(False, error=str(e))
 
 
-def create_routes(data_container: DataContainer, game_name: str, nickname: str) -> InteractorResult:
+def create_routes(data_container: DataContainer, game_name: str, nickname: str, language: str) -> InteractorResult:
     if data_container is None:
-        return get_data_container_error()
+        return get_data_container_error(language)
 
     try:
-        _input_check(data_container, game_name, nickname)
+        _input_check(game_name, nickname, language)
 
         game_name = game_name.upper()
         nickname = nickname.upper()
 
+        _game_data_check(data_container, game_name, nickname, language)
+
         game_data = data_container.get_game(game_name)
         player = data_container.get_player(nickname)
-
-        _game_data_check(data_container, game_data, player)
 
         game_data.create_routes(data_container.generator, player.nickname)
 
@@ -101,20 +95,23 @@ def create_routes(data_container: DataContainer, game_name: str, nickname: str) 
         return InteractorResult(False, error=str(e))
 
 
-def create_primary_route(data_container: DataContainer, game_name: str, nickname: str) -> InteractorResult:
+def create_primary_route(data_container: DataContainer,
+                         game_name: str,
+                         nickname: str,
+                         language: str) -> InteractorResult:
     if data_container is None:
-        return get_data_container_error()
+        return get_data_container_error(language)
 
     try:
-        _input_check(data_container, game_name, nickname)
+        _input_check(game_name, nickname, language)
 
         game_name = game_name.upper()
         nickname = nickname.upper()
 
+        _game_data_check(data_container, game_name, nickname, language)
+
         game_data = data_container.get_game(game_name)
         player = data_container.get_player(nickname)
-
-        _game_data_check(data_container, game_data, player)
 
         game_data.create_primary_route(data_container.generator, player.nickname)
 
@@ -123,23 +120,23 @@ def create_primary_route(data_container: DataContainer, game_name: str, nickname
         return InteractorResult(False, error=str(e))
 
 
-def end_game(data_container: DataContainer, game_name: str, nickname: str) -> InteractorResult:
+def end_game(data_container: DataContainer, game_name: str, nickname: str, language: str) -> InteractorResult:
     if data_container is None:
-        return get_data_container_error()
+        return get_data_container_error(language)
 
     try:
-        _input_check(data_container, game_name, nickname)
+        _input_check(game_name, nickname, language)
 
         game_name = game_name.upper()
         nickname = nickname.upper()
 
+        _game_data_check(data_container, game_name, nickname, language)
+
         game_data = data_container.get_game(game_name)
         player = data_container.get_player(nickname)
 
-        _game_data_check(data_container, game_data, player)
-
         if not data_container.is_host(game_name, player):
-            raise Exception(Translations.get_error(ErrorKeys.ERROR_END_GAME_PERMISSIONS, data_container.language))
+            raise Exception(Translations.get_error(ErrorKeys.ERROR_END_GAME_PERMISSIONS, language))
 
         game_data = data_container.end_game(game_name, player)
         return InteractorResult(True, {
@@ -149,7 +146,7 @@ def end_game(data_container: DataContainer, game_name: str, nickname: str) -> In
         return InteractorResult(False, error=str(e))
 
 
-def game_exists(data_container: DataContainer, game_name: str, nickname: str) -> InteractorResult:
+def game_exists(data_container: DataContainer, game_name: str, nickname: str, language: str) -> InteractorResult:
     response_data = {
         DataKeys.RESPONSE_CODE_KEY: 200,
         DataKeys.RESPONSE_GAME_EXISTS_KEY: False,
@@ -161,9 +158,9 @@ def game_exists(data_container: DataContainer, game_name: str, nickname: str) ->
 
     try:
         if data_container is None:
-            raise Exception(Translations.get_error(ErrorKeys.ERROR_MISSING_DATA, LanguageKeys.get_default()))
+            raise Exception(Translations.get_error(ErrorKeys.ERROR_MISSING_DATA, language))
 
-        _input_check(data_container, game_name, nickname)
+        _input_check(game_name, nickname, language)
 
         game_name = game_name.upper()
         nickname = nickname.upper()
@@ -179,7 +176,7 @@ def game_exists(data_container: DataContainer, game_name: str, nickname: str) ->
         #     response_data[DataKeys.RESPONSE_SUMMARY_EXISTS_KEY] = True
         #     return InteractorResult(True, response_data)
 
-        raise Exception(Translations.get_error(ErrorKeys.ERROR_GAME_ENDED, data_container.language, game_name))
+        raise Exception(Translations.get_error(ErrorKeys.ERROR_GAME_ENDED, language, game_name))
     except Exception as e:
         response_data[DataKeys.RESPONSE_CODE_KEY] = 404
         return InteractorResult(False, response_data, error=str(e))
@@ -189,20 +186,21 @@ def remove_route(data_container: DataContainer,
                  game_name: str,
                  nickname: str,
                  city_a: str,
-                 city_b: str) -> InteractorResult:
+                 city_b: str,
+                 language: str) -> InteractorResult:
     if data_container is None:
-        return get_data_container_error()
+        return get_data_container_error(language)
 
     try:
-        _input_check(data_container, game_name, nickname)
+        _input_check(game_name, nickname, language)
 
         game_name = game_name.upper()
         nickname = nickname.upper()
 
+        _game_data_check(data_container, game_name, nickname, language)
+
         game_data = data_container.get_game(game_name)
         player = data_container.get_player(nickname)
-
-        _game_data_check(data_container, game_data, player)
 
         game_data.remove_route(city_a, city_b, player.nickname)
 

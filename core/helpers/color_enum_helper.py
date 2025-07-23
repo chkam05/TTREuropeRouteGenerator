@@ -5,14 +5,14 @@ class ColorEnumHelper:
     def __new__(cls, *args, **kwargs):
         raise TypeError(f"{cls.__name__} is a static class and cannot be instantiated.")
 
-    @staticmethod
-    def from_str(str_value: str) -> ColorEnum:
+    @classmethod
+    def from_str(cls, str_value: str) -> ColorEnum:
         return next((gt for gt in ColorEnum if gt.value == str_value), ColorEnum.TRANSPARENT)
 
-    @staticmethod
-    def get_list() -> list:
+    @classmethod
+    def get_list(cls) -> list:
         return [color_enum.value for color_enum in ColorEnum]
 
-    @staticmethod
-    def to_str(color_enum: ColorEnum) -> str:
+    @classmethod
+    def to_str(cls, color_enum: ColorEnum) -> str:
         return color_enum.value

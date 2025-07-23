@@ -11,10 +11,10 @@ class PointsConverter:
     def __new__(cls, *args, **kwargs):
         raise TypeError(f"{cls.__name__} is a static class and cannot be instantiated.")
 
-    @staticmethod
-    def convert_length_to_points(length: int) -> int:
-        return PointsConverter._POINTS_PER_LENGTH[length]
+    @classmethod
+    def convert_length_to_points(cls, length: int) -> int:
+        return cls._POINTS_PER_LENGTH[length]
 
-    @staticmethod
-    def convert_points_to_length(points: int) -> int:
-        return next((key for key, val in PointsConverter._POINTS_PER_LENGTH.items() if val == points), 0)
+    @classmethod
+    def convert_points_to_length(cls, points: int) -> int:
+        return next((key for key, val in cls._POINTS_PER_LENGTH.items() if val == points), 0)

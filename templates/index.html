@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{{ header_data.title }} - {{ header_data.subtitle }}</title>
+        <title>{{ labels_data.title }} - {{ labels_data.subtitle }}</title>
         <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     </head>
@@ -11,12 +11,13 @@
     <body>
         <div class="container-wrapper">
             <div class="special-header">
-                <form method="POST" action="/submit">
-                    <select name="color" id="color" onchange="this.form.submit()">
-                        <option value="">-- wybierz --</option>
-                        <option value="red">Czerwony</option>
-                        <option value="green">Zielony</option>
-                        <option value="blue">Niebieski</option>
+                <form method="POST" action="/set_language">
+                    <select name="language" id="language" onchange="this.form.submit()">
+                        {% for language in languages %}
+                            <option value="{{ language }}" {% if selected_language == language %}selected{% endif %}>
+                                {{ language }}
+                            </option>
+                        {% endfor %}
                     </select>
                 </form>
             </div>
@@ -24,25 +25,25 @@
             <div class="container">
                 <div class="container-inner">
                     <div class="header">
-                        <h1>{{ header_data.title }}</h1>
-                        <h2>{{ header_data.subtitle }}</h2>
+                        <h1>{{ labels_data.title }}</h1>
+                        <h2>{{ labels_data.subtitle }}</h2>
                     </div>
 
                     <form method="post" class="content">
                         <table>
                             <tr>
                                 <td>👤</td>
-                                <td><input type="text" name="nickname" placeholder="Nazwa gracza" required /></td>
+                                <td><input type="text" name="nickname" placeholder="{{ labels_data.nickname }}" required /></td>
                             </tr>
                             <tr>
                                 <td>🎲</td>
-                                <td><input type="text" name="game_name" placeholder="Nazwa gry" required /></td>
+                                <td><input type="text" name="game_name" placeholder="{{ labels_data.game_name }}" required /></td>
                             </tr>
                         </table>
 
                         <div class="button-group">
-                            <button formaction="/create_game" type="submit">Stwórz grę</button>
-                            <button formaction="/join_game" type="submit">Dołącz do gry</button>
+                            <button formaction="/create_game" type="submit">{{ labels_data.create_game }}</button>
+                            <button formaction="/join_game" type="submit">{{ labels_data.join_game }}</button>
                         </div>
                     </form>
                 </div>
@@ -54,5 +55,7 @@
                 <p>{{ footer_data.legal_notice }}</p>
             </div>
         </div>
+
+        <script src="{{ url_for('static', filename='js/background_generator.js') }}"></script>
     </body>
 </html>

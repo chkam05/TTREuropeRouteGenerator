@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{ labels_data.title }} - {{ labels_data.subtitle }}: {{ game_data.name }}</title>
+        <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/game.css') }}">
+    </head>
+
+    <body>
+        <div class="container-wrapper">
+            <div class="special-header">
+                <form method="POST" action="/set_language">
+                    <select name="language" id="language" onchange="this.form.submit()">
+                        {% for language in languages %}
+                            <option value="{{ language }}" {% if selected_language == language %}selected{% endif %}>
+                                {{ language }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+
+            <div class="container">
+                <div class="container-inner">
+                    <div class="header">
+                        <h1>{{ labels_data.title }}</h1>
+                        <h2>{{ labels_data.subtitle }}</h2>
+                    </div>
+
+                    <div class="game_info">
+                        <table>
+                            <tr>
+                                <td>🎲</td>
+                                <td>{{ labels_data.game_name }}</td>
+                                <td><b>{{ game_data.name }}</b></td>
+                            </tr>
+                            <tr>
+                                <td>👤</td>
+                                <td>{{ labels_data.nickname }}</td>
+                                <td><b>{{ player_data.nickname }}</b></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="content">
+
+                        <div class="content-buttons">
+                            {% if player_routes|selectattr("is_new")|list %}
+                                <form method="post" action="/game/accept_routes">
+                                    <button type="submit" class="accept-btn">Akceptuj</button>
+                                </form>
+                            {% endif %}
+
+                            <form method="post" action="/game/add_routes">
+                                <input type="hidden" name="long" value="false">
+                                <button type="submit">Dodaj trasy</button>
+                            </form>
+
+                            {% set has_primary = player_routes|selectattr("is_primary")|list|length > 0 %}
+                            <form method="post" action="/game/add_primary_route">
+                                <input type="hidden" name="long" value="true">
+                                <button type="submit" {% if has_primary %}disabled{% endif %}>Dodaj trasę główną</button>
+                            </form>
+
+                            {% if player_data.nickname == game_data.host %}
+                            <form method="get" action="/game/end_game">
+                                <button type="submit" class="end-btn">Zakończ grę</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer">
+                <p>{{ footer_data.title }}<br/>{{ footer_data.version }}<br/>{{ footer_data.copyright }}<br/>
+                {{ footer_data.licence }}</p>
+                <p>{{ footer_data.legal_notice }}</p>
+            </div>
+
+            <script src="{{ url_for('static', filename='js/background_generator.js') }}"></script>
+        </div>
+    </body>
+</html>

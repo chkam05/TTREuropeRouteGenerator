@@ -8,6 +8,7 @@ from controlers.game_controller import GameController
 from controlers.home_controller import HomeController
 from models.data_container import DataContainer
 from models.ssh_keys import SshKeys
+from utils.cookies.cookies_manager import CookiesManager
 from utils.ssh_keys_reader import SshKeysReader
 
 
@@ -24,6 +25,7 @@ class App:
     def __init__(self):
         self._app = Flask(__name__)
         self._app.secret_key = self._get_keys().private_key
+        self._cookies_manager = CookiesManager()
         self._data = self._init_data()
         self._controllers = self._init_controllers()
         self._register_plugins()
@@ -44,8 +46,8 @@ class App:
 
     def _init_controllers(self) -> List[BaseController]:
         return [
-            HomeController(self._data),
-            GameController(self._data)
+            HomeController(self._cookies_manager, self._data),
+            GameController(self._cookies_manager, self._data)
             # MapController(self)
         ]
 

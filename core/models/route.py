@@ -59,13 +59,13 @@ class Route:
 
     # region --- LOAD & SAVE ---
 
-    @staticmethod
-    def from_dict(data: dict) -> 'Route':
-        city_a = data.get(Route.FIELD_CITY_A_KEY)
-        city_b = data.get(Route.FIELD_CITY_B_KEY)
-        variants = data.get(Route.FIELD_VARIANTS_KEY, [])
+    @classmethod
+    def from_dict(cls, data: dict) -> 'Route':
+        city_a = data.get(cls.FIELD_CITY_A_KEY)
+        city_b = data.get(cls.FIELD_CITY_B_KEY)
+        variants = data.get(cls.FIELD_VARIANTS_KEY, [])
 
-        return Route(
+        return cls(
             city_a=City.from_dict(city_a),
             city_b=City.from_dict(city_b),
             variants=[RouteVariant.from_dict(option) for option in variants]

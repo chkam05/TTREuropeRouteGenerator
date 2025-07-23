@@ -3,6 +3,7 @@ class DataKeys:
 
     REQUEST_GAME_NAME_KEY = 'game_name'
     REQUEST_NICKNAME_KEY = 'nickname'
+    REQUEST_LANGUAGE_KEY = 'language'
     REQUEST_ROUTE_CITY_A_KEY = 'city_a'
     REQUEST_ROUTE_CITY_B_KEY = 'city_b'
 

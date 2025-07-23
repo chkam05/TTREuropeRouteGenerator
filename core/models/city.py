@@ -42,17 +42,17 @@ class City:
 
     # region --- LOAD & SAVE ---
 
-    @staticmethod
-    def from_dict(data: dict) -> 'City':
-        point_str = data.get(City.FIELD_POINT_KEY, Point(0, 0).to_dict())
-        direction_str = data.get(City.FIELD_DIRECTION_KEY, DirectionEnum.CENTER.value)
+    @classmethod
+    def from_dict(cls, data: dict) -> 'City':
+        point_str = data.get(cls.FIELD_POINT_KEY, Point(0, 0).to_dict())
+        direction_str = data.get(cls.FIELD_DIRECTION_KEY, DirectionEnum.CENTER.value)
 
-        return City(
-            name=data.get(City.FIELD_NAME_KEY),
-            country=data.get(City.FIELD_COUNTRY_KEY),
+        return cls(
+            name=data.get(cls.FIELD_NAME_KEY),
+            country=data.get(cls.FIELD_COUNTRY_KEY),
             point=Point.from_dict(point_str),
             direction=DirectionEnumHelper.from_str(direction_str),
-            edge_point=data.get(City.FIELD_EDGE_POINT_KEY, False)
+            edge_point=data.get(cls.FIELD_EDGE_POINT_KEY, False)
         )
 
     def to_dict(self) -> dict:

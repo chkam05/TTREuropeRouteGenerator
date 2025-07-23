@@ -16,11 +16,11 @@ class Point:
 
     # region --- LOAD & SAVE ---
 
-    @staticmethod
-    def from_dict(data: dict) -> 'Point':
-        return Point(
-            x=data.get(Point.FIELD_X_KEY),
-            y=data.get(Point.FIELD_Y_KEY)
+    @classmethod
+    def from_dict(cls, data: dict) -> 'Point':
+        return cls(
+            x=data.get(cls.FIELD_X_KEY),
+            y=data.get(cls.FIELD_Y_KEY)
         )
 
     def to_dict(self) -> dict:
