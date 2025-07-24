@@ -3,6 +3,7 @@ from interactors.models.interactor_result import InteractorResult
 from models.data_container import DataContainer
 from static.data_keys import DataKeys
 from static.error_keys import ErrorKeys
+from static.redirections import Redirections
 from static.translations import Translations
 
 
@@ -146,13 +147,17 @@ def end_game(data_container: DataContainer, game_name: str, nickname: str, langu
         return InteractorResult(False, error=str(e))
 
 
-def game_exists(data_container: DataContainer, game_name: str, nickname: str, language: str) -> InteractorResult:
+def game_exists(data_container: DataContainer,
+                game_name: str,
+                nickname: str,
+                language: str,
+                self_route: str = '/game') -> InteractorResult:
     response_data = {
         DataKeys.RESPONSE_CODE_KEY: 200,
         DataKeys.RESPONSE_GAME_EXISTS_KEY: False,
         DataKeys.RESPONSE_SUMMARY_EXISTS_KEY: False,
         DataKeys.RESPONSE_HOME_ROUTE_KEY: '/',
-        DataKeys.RESPONSE_SELF_ROUTE_KEY: '/game',
+        DataKeys.RESPONSE_SELF_ROUTE_KEY: self_route,
         DataKeys.RESPONSE_SUMMARY_ROUTE_KEY: '/summary'
     }
 
@@ -206,6 +211,40 @@ def remove_route(data_container: DataContainer,
 
         return InteractorResult(True, {
             DataKeys.INTERACTOR_NEW_ROUTES_COUNT_KEY: game_data.count_new_routes(nickname)
+        })
+    except Exception as e:
+        return InteractorResult(False, error=str(e))
+
+def show_route_on_map(data_container: DataContainer,
+                      game_name: str,
+                      nickname: str,
+                      city_a: str,
+                      city_b: str,
+                      language: str) -> InteractorResult:
+    if data_container is None:
+        return get_data_container_error(language)
+
+    try:
+        _input_check(game_name, nickname, language)
+
+        game_name = game_name.upper()
+        nickname = nickname.upper()
+
+        _game_data_check(data_container, game_name, nickname, language)
+
+        game_data = data_container.get_game(game_name)
+        player = data_container.get_player(nickname)
+
+        route = game_data.find_player_route_by_cities(city_a, city_b, player.nickname)
+
+        if not route:
+            error_message = Translations.get_error(ErrorKeys.ERROR_ROUTE_PATH_NOT_EXISTS, language)
+            return InteractorResult(False, {
+                DataKeys.INTERACTOR_REDIRECTION_KEY: Redirections.MAP
+            }, error_message)
+
+        return InteractorResult(True, {
+            DataKeys.SESSION_ROUTE_KEY: route.to_dict(),
         })
     except Exception as e:
         return InteractorResult(False, error=str(e))

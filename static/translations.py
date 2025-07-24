@@ -14,6 +14,7 @@ class Translations:
             ErrorKeys.ERROR_MISSING_GAME_NAME: 'Missing \"Game Name\".',
             ErrorKeys.ERROR_MISSING_NICKNAME: 'Missing \"Nickname\".',
             ErrorKeys.ERROR_PLAYER_NOT_EXISTS: 'Player with nickname \"{0}\" does not exists.',
+            ErrorKeys.ERROR_ROUTE_PATH_NOT_EXISTS: 'Route path does not exist.',
             ErrorKeys.ERROR_SESSION_DATA_MISSING: 'Missing or corrupt session data: \"{0}\"'
         },
         LanguageKeys.LANG_PL: {

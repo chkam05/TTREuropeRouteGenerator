@@ -1,5 +1,6 @@
 class DataKeys:
     INTERACTOR_NEW_ROUTES_COUNT_KEY = 'new_routes_count'
+    INTERACTOR_REDIRECTION_KEY = 'redirection'
 
     REQUEST_GAME_NAME_KEY = 'game_name'
     REQUEST_NICKNAME_KEY = 'nickname'
@@ -20,6 +21,7 @@ class DataKeys:
     SESSION_NICKNAME_KEY = REQUEST_NICKNAME_KEY
     SESSION_PLAYER_DATA_KEY = 'player_data'
     SESSION_PLAYER_ROUTES_KEY = 'player_routes'
+    SESSION_ROUTE_PATH_KEY = 'route_path'
     SESSION_ROUTE_KEY = 'route'
 
     def __new__(cls, *args, **kwargs):

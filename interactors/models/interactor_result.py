@@ -16,7 +16,7 @@ class InteractorResult:
 
     @property
     def results(self) -> Dict[str, Any]:
-        return {key: value for key, value in self._results}
+        return {key: value for key, value in self._results.items()}
 
     @property
     def success(self) -> bool:
@@ -29,6 +29,9 @@ class InteractorResult:
 
     def has_error(self) -> bool:
         return self._error is not None and len(self._error) > 0
+
+    def has_result(self, key: str) -> bool:
+        return key in self._results
 
     def has_results(self) -> bool:
         return any(self._results)

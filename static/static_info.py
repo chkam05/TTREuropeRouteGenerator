@@ -10,6 +10,10 @@ class StaticInfo:
     HOME_INPUT_GAME_NAME_KEY = 'game_name'
     HOME_INPUT_NICKNAME_KEY = 'nickname'
 
+    GAME_ACCEPT_ROUTES_KEY = 'accept_routes'
+    GAME_CREATE_ROUTES = 'create_routes'
+    GAME_CREATE_PRIMARY_ROUTE = 'create_primary_routes'
+    GAME_END_GAME = 'end_game'
     GAME_GAME_NAME_KEY = 'game_name'
     GAME_NICKNAME_KEY = 'nickname'
 
@@ -42,12 +46,20 @@ class StaticInfo:
         LanguageKeys.LANG_EN_US: {
             HEADER_TITLE_KEY: '🚂 Ticket to Ride Europe',
             HEADER_SUBTITLE_KEY: 'Game',
+            GAME_ACCEPT_ROUTES_KEY: 'Accept',
+            GAME_CREATE_ROUTES: 'Add routes',
+            GAME_CREATE_PRIMARY_ROUTE: 'Add primary route',
+            GAME_END_GAME: 'End game',
             GAME_GAME_NAME_KEY: 'Game name:',
             GAME_NICKNAME_KEY: 'Nickname:',
         },
         LanguageKeys.LANG_PL: {
             HEADER_TITLE_KEY: '🚂 Wsiąść do Pociągu Europa',
             HEADER_SUBTITLE_KEY: 'Rozgrywka',
+            GAME_ACCEPT_ROUTES_KEY: 'Akceptuj',
+            GAME_CREATE_ROUTES: 'Dodaj trasy',
+            GAME_CREATE_PRIMARY_ROUTE: 'Dodaj trasę główną',
+            GAME_END_GAME: 'Zakończ grę',
             GAME_GAME_NAME_KEY: 'Nazwa gry:',
             GAME_NICKNAME_KEY: 'Nazwa gracza:',
         }

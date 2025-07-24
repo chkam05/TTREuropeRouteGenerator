@@ -11,7 +11,7 @@
     <body>
         <div class="container-wrapper">
             <div class="special-header">
-                <form method="POST" action="/set_language">
+                <form method="POST" action="/game/set_language">
                     <select name="language" id="language" onchange="this.form.submit()">
                         {% for language in languages %}
                             <option value="{{ language }}" {% if selected_language == language %}selected{% endif %}>
@@ -45,28 +45,65 @@
                     </div>
 
                     <div class="content">
+                        <div class="content-routes">
+                            {% for route in player_routes %}
+                            <div class="route-item">
+                                <div class="route-header">
+                                    <h3>{% if route.is_primary %}🚂{% else %}🚃{% endif %} {{ route.city_a }} ➡️ {{ route.city_b }}</h3>
+                                    <div class="route-buttons">
+                                        <form method="post" action="/game/show_route_on_map">
+                                            <input type="hidden" name="city_a" value="{{ route.city_a }}">
+                                            <input type="hidden" name="city_b" value="{{ route.city_b }}">
+                                            <button type="submit">🗺️</button>
+                                        </form>
+                                        {% if route.is_new %}
+                                        <form method="post" action="/game/remove_route">
+                                            <input type="hidden" name="city_a" value="{{ route.city_a }}">
+                                            <input type="hidden" name="city_b" value="{{ route.city_b }}">
+                                            <button type="submit" class="remove-btn">✖</button>
+                                        </form>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="route-content">
+                                    <table>
+                                        <tr>
+                                            <td>🛤️</td>
+                                            <td>Route:</td>
+                                            <td>{{ route.city_a }} → {{ route.city_b }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>🔢</td>
+                                            <td>Points:</td>
+                                            <td>{{ route.points }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
 
                         <div class="content-buttons">
-                            {% if player_routes|selectattr("is_new")|list %}
-                                <form method="post" action="/game/accept_routes">
-                                    <button type="submit" class="accept-btn">Akceptuj</button>
-                                </form>
+                            {% if game_data.count_new_routes(player_data.nickname) > 0 %}
+                            <form method="post" action="/game/accept_routes">
+                                <button type="submit" class="accept-btn">{{ labels_data.accept_routes }}</button>
+                            </form>
                             {% endif %}
 
-                            <form method="post" action="/game/add_routes">
+                            <form method="post" action="/game/create_routes">
                                 <input type="hidden" name="long" value="false">
-                                <button type="submit">Dodaj trasy</button>
+                                <button type="submit">{{ labels_data.create_routes }}</button>
                             </form>
 
-                            {% set has_primary = player_routes|selectattr("is_primary")|list|length > 0 %}
-                            <form method="post" action="/game/add_primary_route">
+                            {% set has_primary = game_data.has_primary_route(player_data.nickname) %}
+                            <form method="post" action="/game/create_primary_route">
                                 <input type="hidden" name="long" value="true">
-                                <button type="submit" {% if has_primary %}disabled{% endif %}>Dodaj trasę główną</button>
+                                <button type="submit" {% if has_primary %}disabled{% endif %}>{{ labels_data.create_primary_routes }}</button>
                             </form>
 
                             {% if player_data.nickname == game_data.host %}
                             <form method="get" action="/game/end_game">
-                                <button type="submit" class="end-btn">Zakończ grę</button>
+                                <button type="submit" class="end-btn">{{ labels_data.end_game }}</button>
                             </form>
                             {% endif %}
                         </div>
@@ -80,7 +117,11 @@
                 <p>{{ footer_data.legal_notice }}</p>
             </div>
 
+            <script>
+                const GAME_EXISTS_ENDPOINT = "{{ url_for('.game_exists') }}";
+            </script>
             <script src="{{ url_for('static', filename='js/background_generator.js') }}"></script>
+            <script src="{{ url_for('static', filename='js/game_exists.js') }}" defer></script>
         </div>
     </body>
 </html>

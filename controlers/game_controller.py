@@ -2,7 +2,7 @@ from flask import redirect, url_for, session, render_template, jsonify, make_res
 
 from controlers.base_controller import BaseController
 from interactors.game_interactors import game, accept_routes, create_routes, create_primary_route, end_game, \
-    remove_route, game_exists
+    remove_route, game_exists, show_route_on_map
 from models.data_container import DataContainer
 from static.data_keys import DataKeys
 from static.http_methods import HttpMethods
@@ -25,6 +25,7 @@ class GameController(BaseController):
     ENDPOINT_END_GAME = '/end_game'
     ENDPOINT_GAME_EXISTS = '/game_exists'
     ENDPOINT_REMOVE_ROUTE = '/remove_route'
+    ENDPOINT_SET_LANGUAGE = '/set_language'
     ENDPOINT_SHOW_ROUTE_ON_MAP = '/show_route_on_map'
 
     def __init__(self, cookies_manager: CookiesManager, data_container: DataContainer):
@@ -32,12 +33,24 @@ class GameController(BaseController):
 
     def _register_routes(self):
         self._register_route(self.ENDPOINT_GAME, self.game, methods=[HttpMethods.GET])
+        self._register_route(self.ENDPOINT_ACCEPT_ROUTES, self.accept_routes, methods=[HttpMethods.POST])
+        self._register_route(self.ENDPOINT_CREATE_ROUTES, self.create_routes, methods=[HttpMethods.POST])
+        self._register_route(self.ENDPOINT_CREATE_PRIMARY_ROUTE, self.create_primary_route, methods=[HttpMethods.POST])
+        self._register_route(self.ENDPOINT_END_GAME, self.end_game, methods=[HttpMethods.GET])
+        self._register_route(self.ENDPOINT_GAME_EXISTS, self.game_exists, methods=[HttpMethods.GET])
+        self._register_route(self.ENDPOINT_REMOVE_ROUTE, self.remove_route, methods=[HttpMethods.POST])
+        self._register_route(self.ENDPOINT_SET_LANGUAGE, self.set_language, methods=[HttpMethods.POST])
+        self._register_route(self.ENDPOINT_SHOW_ROUTE_ON_MAP, self.show_route_on_map, methods=[HttpMethods.POST])
 
     # region --- REDIRECTIONS ---
 
     @staticmethod
     def _redirect_home():
         return redirect(url_for(Redirections.HOME))
+
+    @staticmethod
+    def _redirect_map():
+        return redirect(url_for(Redirections.MAP))
 
     @staticmethod
     def _redirect_itself():
@@ -145,5 +158,26 @@ class GameController(BaseController):
             session[DataKeys.SESSION_ERROR_MESSAGE_KEY] = result.error
             return self._redirect_home()
 
+    def set_language(self):
+        session_id, cookies_data = self._cookies_manager.get_cookies_data()
+        selected_language = RequestDataManager.get_str(DataKeys.REQUEST_LANGUAGE_KEY)
+
+        cookies_data.language = selected_language
+
+        return self._redirect_itself()
+
     def show_route_on_map(self):
-        pass
+        game_name = session.get(DataKeys.SESSION_GAME_NAME_KEY)
+        nickname = session.get(DataKeys.SESSION_NICKNAME_KEY)
+        city_a = RequestDataManager.get_str(DataKeys.REQUEST_ROUTE_CITY_A_KEY)
+        city_b = RequestDataManager.get_str(DataKeys.REQUEST_ROUTE_CITY_B_KEY)
+
+        result = show_route_on_map(self._data_container, game_name, nickname, city_a, city_b, self._get_language())
+
+        if result.success:
+            session[DataKeys.SESSION_ROUTE_KEY] = result.get(DataKeys.SESSION_ROUTE_KEY)
+            return self._redirect_map()
+        elif result.get(DataKeys.INTERACTOR_REDIRECTION_KEY) == Redirections.GAME:
+            return self._redirect_itself()
+        else:
+            return self._redirect_home()

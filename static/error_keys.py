@@ -7,6 +7,7 @@ class ErrorKeys:
     ERROR_MISSING_GAME_NAME = 'error_missing_game_name'
     ERROR_MISSING_NICKNAME = 'error_missing_nickname'
     ERROR_PLAYER_NOT_EXISTS = 'error_player_not_exists'
+    ERROR_ROUTE_PATH_NOT_EXISTS = 'error_route_path_not_exists'
     ERROR_SESSION_DATA_MISSING = 'error_session_data_missing'
 
     def __new__(cls, *args, **kwargs):

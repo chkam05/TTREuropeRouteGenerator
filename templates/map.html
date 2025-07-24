@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{ labels_data.title }}: {{ route.generated_route.city_a }} → {{ route.generated_route.city_b }} </title>
+        <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
+    </head>
+
+    <body>
+        <div class="container-wrapper">
+            <div class="special-header">
+                <form method="POST" action="/map/set_language">
+                    <select name="language" id="language" onchange="this.form.submit()">
+                        {% for language in languages %}
+                            <option value="{{ language }}" {% if selected_language == language %}selected{% endif %}>
+                                {{ language }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+
+            <div class="container">
+                <div class="container-inner">
+                    <div class="header">
+                        <h1>{{ labels_data.title }}</h1>
+                        <h2>🛤️ {{ route.generated_route.city_a }} → {{ route.generated_route.city_b }}</h2>
+                    </div>
+
+                    <div class="content">
+                        <div class="map-wrapper">
+                            <div class="map-container">
+                                <div id="map-image">
+                                    <img src="{{ url_for('static', filename=map_image) }}" alt="Mapa" id="map-image-js">
+                                    <canvas id="route-canvas"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer">
+                <p>{{ footer_data.title }}<br/>{{ footer_data.version }}<br/>{{ footer_data.copyright }}<br/>
+                {{ footer_data.licence }}</p>
+                <p>{{ footer_data.legal_notice }}</p>
+            </div>
+        </div>
+
+        <script>
+          const route_path = {{ route_path|tojson }};
+          const GAME_EXISTS_ENDPOINT = "{{ url_for('.game_exists') }}";
+        </script>
+        <script src="{{ url_for('static', filename='js/route_drawer.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/background_generator.js') }}"></script>
+    </body>
+</html>
