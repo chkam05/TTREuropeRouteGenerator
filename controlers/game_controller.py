@@ -2,7 +2,7 @@ from flask import redirect, url_for, session, render_template, jsonify, make_res
 
 from controlers.base_controller import BaseController
 from interactors.game_interactors import game, accept_routes, create_routes, create_primary_route, end_game, \
-    remove_route, game_exists, show_route_on_map
+    remove_route, game_exists, show_route_on_map, set_route_completed
 from models.data_container import DataContainer
 from static.data_keys import DataKeys
 from static.http_methods import HttpMethods
@@ -26,6 +26,7 @@ class GameController(BaseController):
     ENDPOINT_GAME_EXISTS = '/game_exists'
     ENDPOINT_REMOVE_ROUTE = '/remove_route'
     ENDPOINT_SET_LANGUAGE = '/set_language'
+    ENDPOINT_SET_ROUTE_COMPLETED = '/set_route_completed'
     ENDPOINT_SHOW_ROUTE_ON_MAP = '/show_route_on_map'
 
     def __init__(self, cookies_manager: CookiesManager, data_container: DataContainer):
@@ -40,6 +41,7 @@ class GameController(BaseController):
         self._register_route(self.ENDPOINT_GAME_EXISTS, self.game_exists, methods=[HttpMethods.GET])
         self._register_route(self.ENDPOINT_REMOVE_ROUTE, self.remove_route, methods=[HttpMethods.POST])
         self._register_route(self.ENDPOINT_SET_LANGUAGE, self.set_language, methods=[HttpMethods.POST])
+        self._register_route(self.ENDPOINT_SET_ROUTE_COMPLETED, self.set_route_completed, methods=[HttpMethods.POST])
         self._register_route(self.ENDPOINT_SHOW_ROUTE_ON_MAP, self.show_route_on_map, methods=[HttpMethods.POST])
 
     # region --- REDIRECTIONS ---
@@ -74,6 +76,7 @@ class GameController(BaseController):
                 languages=LanguageKeys.LANGUAGES,
                 player_data=result.get(DataKeys.SESSION_PLAYER_DATA_KEY),
                 player_routes=result.get(DataKeys.SESSION_PLAYER_ROUTES_KEY),
+                players=result.get(DataKeys.SESSION_PLAYERS_KEY),
                 selected_language=cookies_data.language
             ))
 
@@ -165,6 +168,22 @@ class GameController(BaseController):
         cookies_data.language = selected_language
 
         return self._redirect_itself()
+
+    def set_route_completed(self):
+        game_name = session.get(DataKeys.SESSION_GAME_NAME_KEY)
+        nickname = session.get(DataKeys.SESSION_NICKNAME_KEY)
+        city_a = RequestDataManager.get_str(DataKeys.REQUEST_ROUTE_CITY_A_KEY)
+        city_b = RequestDataManager.get_str(DataKeys.REQUEST_ROUTE_CITY_B_KEY)
+        is_completed = RequestDataManager.get_bool(DataKeys.REQUEST_ROUTE_IS_COMPLETED)
+
+        result = set_route_completed(self._data_container, game_name, nickname, city_a, city_b, is_completed,
+                                     self._get_language())
+
+        if result.success:
+            return self._redirect_itself()
+        else:
+            session[DataKeys.SESSION_ERROR_MESSAGE_KEY] = result.error
+            return self._redirect_home()
 
     def show_route_on_map(self):
         game_name = session.get(DataKeys.SESSION_GAME_NAME_KEY)

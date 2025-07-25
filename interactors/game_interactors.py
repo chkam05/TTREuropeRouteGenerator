@@ -46,7 +46,8 @@ def game(data_container: DataContainer, game_name: str, nickname: str, language:
         return InteractorResult(True, {
             DataKeys.SESSION_GAME_DATA_KEY: game_data,
             DataKeys.SESSION_PLAYER_DATA_KEY: player,
-            DataKeys.SESSION_PLAYER_ROUTES_KEY: player_routes
+            DataKeys.SESSION_PLAYER_ROUTES_KEY: player_routes,
+            DataKeys.SESSION_PLAYERS_KEY: game_data.get_players_with_points()
         })
     except Exception as e:
         return InteractorResult(False, error=str(e))
@@ -158,7 +159,8 @@ def game_exists(data_container: DataContainer,
         DataKeys.RESPONSE_SUMMARY_EXISTS_KEY: False,
         DataKeys.RESPONSE_HOME_ROUTE_KEY: '/',
         DataKeys.RESPONSE_SELF_ROUTE_KEY: self_route,
-        DataKeys.RESPONSE_SUMMARY_ROUTE_KEY: '/summary'
+        DataKeys.RESPONSE_SUMMARY_ROUTE_KEY: '/summary',
+        DataKeys.RESPONSE_SHOULD_REFRESH_KEY: False
     }
 
     try:
@@ -172,6 +174,7 @@ def game_exists(data_container: DataContainer,
 
         if data_container.has_game(game_name):
             response_data[DataKeys.RESPONSE_GAME_EXISTS_KEY] = True
+            response_data[DataKeys.RESPONSE_SHOULD_REFRESH_KEY] = data_container.have_refresh(nickname)
             return InteractorResult(True, response_data)
 
         game_data = data_container.get_game(game_name)
@@ -207,11 +210,47 @@ def remove_route(data_container: DataContainer,
         game_data = data_container.get_game(game_name)
         player = data_container.get_player(nickname)
 
-        game_data.remove_route(city_a, city_b, player.nickname)
+        route = game_data.find_player_route_by_cities(city_a, city_b, player.nickname)
+        game_data.remove_route(route, player.nickname)
+
+        if route.is_completed:
+            data_container.set_refresh(game_data.name, player.nickname)
 
         return InteractorResult(True, {
             DataKeys.INTERACTOR_NEW_ROUTES_COUNT_KEY: game_data.count_new_routes(nickname)
         })
+    except Exception as e:
+        return InteractorResult(False, error=str(e))
+
+def set_route_completed(data_container: DataContainer,
+                        game_name: str,
+                        nickname: str,
+                        city_a: str,
+                        city_b: str,
+                        is_completed: bool,
+                        language: str) -> InteractorResult:
+    if data_container is None:
+        return get_data_container_error(language)
+
+    try:
+        _input_check(game_name, nickname, language)
+
+        game_name = game_name.upper()
+        nickname = nickname.upper()
+
+        _game_data_check(data_container, game_name, nickname, language)
+
+        game_data = data_container.get_game(game_name)
+        player = data_container.get_player(nickname)
+        route = game_data.find_player_route_by_cities(city_a, city_b, player.nickname)
+
+        if not route:
+            raise Exception(Translations.get_error(ErrorKeys.ERROR_ROUTE_PATH_NOT_EXISTS, language))
+
+        route.is_completed = is_completed
+        data_container.set_refresh(game_data.name, player.nickname)
+
+        return InteractorResult(True)
     except Exception as e:
         return InteractorResult(False, error=str(e))
 

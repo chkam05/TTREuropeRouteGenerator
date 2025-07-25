@@ -9,6 +9,13 @@
     </head>
 
     <body>
+        {% if error_message %}
+        <div id="error-popup" class="error-popup">
+            <span>{{ error_message }}</span>
+            <button class="close-btn" onclick="closeErrorPopup()">✖</button>
+        </div>
+        {% endif %}
+
         <div class="container-wrapper">
             <div class="special-header">
                 <form method="POST" action="/set_language">
@@ -56,6 +63,19 @@
             </div>
         </div>
 
+        <script>
+        function closeErrorPopup() {
+            fetch("/clear_error", {
+                method: "POST",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                }
+            }).finally(() => {
+                const popup = document.getElementById("error-popup");
+                if (popup) popup.remove();
+            });
+        }
+        </script>
         <script src="{{ url_for('static', filename='js/background_generator.js') }}"></script>
     </body>
 </html>

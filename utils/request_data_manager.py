@@ -14,6 +14,11 @@ class RequestDataManager:
         return request.form.get(attrib_key)
 
     @staticmethod
+    def get_bool(attrib_key: str) -> Optional[bool]:
+        value = request.form.get(attrib_key)
+        return bool(value) if value else None
+
+    @staticmethod
     def get_str(attrib_key: str, default: Optional[str] = None) -> Optional[str]:
         value = request.form.get(attrib_key)
         return str(value) if value else default if default else None

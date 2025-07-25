@@ -8,10 +8,13 @@ function checkGameExists() {
                 } else {
                     window.location.href = data.home_route;
                 }
-        }})
-    .catch(() => {
-        window.location.href = '/';
-    });
+            } else if (data.should_refresh) {
+                window.location.reload();
+            }
+        })
+        .catch(() => {
+            window.location.href = '/';
+        });
 }
 
 setInterval(checkGameExists, 5000);

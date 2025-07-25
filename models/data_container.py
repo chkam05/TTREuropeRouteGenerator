@@ -1,9 +1,10 @@
-from typing import Optional, Dict
+from typing import Optional, Dict, List
 
 from core.models.world_map import WorldMap
 from core.routes_generator import RoutesGenerator
 from models.game import Game
 from models.player import Player
+from models.player_summary import PlayerSummary
 from static.language_keys import LanguageKeys
 from utils.file_utils import FileUtils
 
@@ -11,15 +12,34 @@ from utils.file_utils import FileUtils
 class DataContainer:
     FIELD_GAMES_KEY = 'games'
     FIELD_PLAYERS_KEY = 'players'
+    FIELD_REFRESH_KEY = 'refresh'
+    FIELD_SUMMARY_KEY = 'summary'
 
     def __init__(self,
-                 language: Optional[str] = None,
                  games: Optional[Dict[str, Game]] = None,
-                 players: Optional[Dict[str, Player]] = None):
+                 players: Optional[Dict[str, Player]] = None,
+                 refresh: Optional[Dict[str, bool]] = None,
+                 summary: Optional[Dict[str, List[PlayerSummary]]] = None):
         self._games: Dict[str, Game] = games if games else {}
         self._players: Dict[str, Player] = players if players else {}
+        self._refresh: Dict[str, bool] = refresh if refresh else {}
+        self._summary: Dict[str, List[PlayerSummary]] = summary if summary else {}
 
         self._generator = RoutesGenerator(WorldMap.create_default())
+
+    def have_refresh(self, nickname: str) -> bool:
+        if nickname in self._refresh:
+            have_refresh = self._refresh[nickname]
+            self._refresh[nickname] = False
+            return have_refresh
+        return False
+
+    def set_refresh(self, game_name: str, current_nickname: str):
+        if self.has_game(game_name):
+            for nickname in self.get_game(game_name).get_players():
+                if nickname == current_nickname:
+                    continue
+                self._refresh[nickname] = True
 
     # region --- PROPERTIES ---
 
@@ -35,10 +55,14 @@ class DataContainer:
     def from_dict(cls, data: dict) -> 'DataContainer':
         games = data.get(cls.FIELD_GAMES_KEY, {})
         players = data.get(cls.FIELD_PLAYERS_KEY, {})
+        summary = data.get(cls.FIELD_SUMMARY_KEY, {})
 
         return cls(
             games={game_name: Game.from_dict(game) for game_name, game in games.items()},
-            players={nickname: Player.from_dict(player) for nickname, player in players.items()}
+            players={nickname: Player.from_dict(player) for nickname, player in players.items()},
+            refresh=data.get(cls.FIELD_REFRESH_KEY, {}),
+            summary={nickname: [PlayerSummary.from_dict(s) for s in summaries]
+                     for nickname, summaries in summary.items()}
         )
 
     @classmethod
@@ -52,10 +76,12 @@ class DataContainer:
     def to_dict(self) -> dict:
         games = {game_name: game.to_dict() for game_name, game in self._games.items()}
         players = {nickname: player.to_dict() for nickname, player in self._players.items()}
+        summary = {nickname: [s.to_dict() for s in summaries] for nickname, summaries in self._summary.items()}
 
         return {
             self.FIELD_GAMES_KEY: games,
-            self.FIELD_PLAYERS_KEY: players
+            self.FIELD_PLAYERS_KEY: players,
+            self.FIELD_REFRESH_KEY: self._refresh
         }
 
     def save_to_file(self, file_path: str):
@@ -102,6 +128,7 @@ class DataContainer:
         if not self.has_player(nickname):
             new_player = Player(nickname, '')
             self._players[nickname] = new_player
+            self._refresh[nickname] = False
             return new_player
         return None
 
@@ -115,5 +142,11 @@ class DataContainer:
 
     def has_player(self, nickname: str):
         return nickname in self._players
+
+    # endregion
+
+    # region --- SUMMARY ---
+
+
 
     # endregion

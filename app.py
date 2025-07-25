@@ -1,3 +1,5 @@
+import signal
+import sys
 import threading
 from typing import List, Callable, Tuple
 
@@ -26,6 +28,7 @@ class App:
     def __init__(self):
         self._app = Flask(__name__)
         self._app.secret_key = self._get_keys().private_key
+        self._setup_signal_handlers()
         self._cookies_manager = CookiesManager()
         self._data = self._init_data()
         self._controllers = self._init_controllers()
@@ -36,6 +39,14 @@ class App:
 
     def _get_keys(self) -> SshKeys:
         return SshKeysReader.read_ssh_private_key(self.KEYS_FILE_PATH)
+
+    def _setup_signal_handlers(self):
+        def handle_exit(signum, frame):
+            self.cleanup()
+            sys.exit(0)
+
+        signal.signal(signal.SIGINT, handle_exit)   # Ctrl+C
+        signal.signal(signal.SIGTERM, handle_exit)  # Kill
 
     def _init_data(self) -> DataContainer:
         try:
@@ -82,7 +93,17 @@ class App:
         else:
             self._start(self.HOST, self.PORT_HTTPS, debug, True)
 
+    def cleanup(self):
+        print('Closing the application. Saving data...')
+        self._data.save_to_file(self.DATA_CONTAINER_FILE_PATH)
 
 if __name__ == '__main__':
     app = App()
-    app.start_https(debug=True, multithreading=False)
+
+    try:
+        app.start_https(debug=True, multithreading=False)
+    except KeyboardInterrupt:
+        app.cleanup()
+    except Exception as e:
+        print(f'An error occurred: {e}')
+        # app.cleanup()

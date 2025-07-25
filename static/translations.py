@@ -18,7 +18,16 @@ class Translations:
             ErrorKeys.ERROR_SESSION_DATA_MISSING: 'Missing or corrupt session data: \"{0}\"'
         },
         LanguageKeys.LANG_PL: {
-
+            ErrorKeys.ERROR_END_GAME_PERMISSIONS: 'Niewystarczające uprawnienia do zakończenia gry.',
+            ErrorKeys.ERROR_GAME_ENDED: 'Gra \"{0}\" zakończyła się.',
+            ErrorKeys.ERROR_GAME_EXISTS: 'Gra o nazwie \"{0}\" już istnieje.',
+            ErrorKeys.ERROR_GAME_NOT_EXISTS: 'Gra o nazwie \"{0}\" nie istnieje.',
+            ErrorKeys.ERROR_MISSING_DATA: 'Kontener danych aplikacji nie został załadowany.',
+            ErrorKeys.ERROR_MISSING_GAME_NAME: 'Brakuje \"Nazwy gry\".',
+            ErrorKeys.ERROR_MISSING_NICKNAME: 'Brakuje \"Nazwy gracza\".',
+            ErrorKeys.ERROR_PLAYER_NOT_EXISTS: 'Gracz o nazwie \"{0}\" nie istnieje.',
+            ErrorKeys.ERROR_ROUTE_PATH_NOT_EXISTS: 'Ścieżka trasy nie istnieje.',
+            ErrorKeys.ERROR_SESSION_DATA_MISSING: 'Brakujące lub uszkodzone dane sesji: \"{0}\"'
         }
     }
 

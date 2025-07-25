@@ -7,6 +7,7 @@ class DataKeys:
     REQUEST_LANGUAGE_KEY = 'language'
     REQUEST_ROUTE_CITY_A_KEY = 'city_a'
     REQUEST_ROUTE_CITY_B_KEY = 'city_b'
+    REQUEST_ROUTE_IS_COMPLETED = 'is_completed'
 
     RESPONSE_CODE_KEY = 'response_code'
     RESPONSE_GAME_EXISTS_KEY = 'game_exists'
@@ -14,6 +15,7 @@ class DataKeys:
     RESPONSE_HOME_ROUTE_KEY = 'home_route'
     RESPONSE_SELF_ROUTE_KEY = 'self_route'
     RESPONSE_SUMMARY_ROUTE_KEY = 'summary_route'
+    RESPONSE_SHOULD_REFRESH_KEY = 'should_refresh'
 
     SESSION_ERROR_MESSAGE_KEY = 'error_message'
     SESSION_GAME_DATA_KEY = 'game_data'
@@ -21,6 +23,7 @@ class DataKeys:
     SESSION_NICKNAME_KEY = REQUEST_NICKNAME_KEY
     SESSION_PLAYER_DATA_KEY = 'player_data'
     SESSION_PLAYER_ROUTES_KEY = 'player_routes'
+    SESSION_PLAYERS_KEY = 'players'
     SESSION_ROUTE_PATH_KEY = 'route_path'
     SESSION_ROUTE_KEY = 'route'
 

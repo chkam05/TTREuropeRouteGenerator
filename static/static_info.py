@@ -14,8 +14,10 @@ class StaticInfo:
     GAME_CREATE_ROUTES = 'create_routes'
     GAME_CREATE_PRIMARY_ROUTE = 'create_primary_routes'
     GAME_END_GAME = 'end_game'
+    GAME_FINISHED_ROUTE = 'finished_route'
     GAME_GAME_NAME_KEY = 'game_name'
     GAME_NICKNAME_KEY = 'nickname'
+    GAME_PLAYERS_KEY = 'players'
 
     FOOTER_TITLE_KEY = 'title'
     FOOTER_VERSION_KEY = 'version'
@@ -50,8 +52,10 @@ class StaticInfo:
             GAME_CREATE_ROUTES: 'Add routes',
             GAME_CREATE_PRIMARY_ROUTE: 'Add primary route',
             GAME_END_GAME: 'End game',
+            GAME_FINISHED_ROUTE: 'Finished',
             GAME_GAME_NAME_KEY: 'Game name:',
             GAME_NICKNAME_KEY: 'Nickname:',
+            GAME_PLAYERS_KEY: 'Players:',
         },
         LanguageKeys.LANG_PL: {
             HEADER_TITLE_KEY: '🚂 Wsiąść do Pociągu Europa',
@@ -60,8 +64,10 @@ class StaticInfo:
             GAME_CREATE_ROUTES: 'Dodaj trasy',
             GAME_CREATE_PRIMARY_ROUTE: 'Dodaj trasę główną',
             GAME_END_GAME: 'Zakończ grę',
+            GAME_FINISHED_ROUTE: 'Stworzona',
             GAME_GAME_NAME_KEY: 'Nazwa gry:',
             GAME_NICKNAME_KEY: 'Nazwa gracza:',
+            GAME_PLAYERS_KEY: 'Gracze:',
         }
     }
 

@@ -18,6 +18,7 @@ class HomeController(BaseController):
     URL_PREFIX = '/'
 
     ENDPOINT_INDEX = '/'
+    ENDPOINT_CLEAR_ERROR = '/clear_error'
     ENDPOINT_CREATE_GAME = '/create_game'
     ENDPOINT_JOIN_GAME = '/join_game'
     ENDPOINT_SET_LANGUAGE = '/set_language'
@@ -27,6 +28,7 @@ class HomeController(BaseController):
 
     def _register_routes(self):
         self._register_route(self.ENDPOINT_INDEX, self.index, methods=[HttpMethods.GET])
+        self._register_route(self.ENDPOINT_CLEAR_ERROR, self.clear_error, methods=[HttpMethods.POST])
         self._register_route(self.ENDPOINT_CREATE_GAME, self.create_game, methods=[HttpMethods.POST])
         self._register_route(self.ENDPOINT_JOIN_GAME, self.join_game, methods=[HttpMethods.POST])
         self._register_route(self.ENDPOINT_SET_LANGUAGE, self.set_language, methods=[HttpMethods.POST])
@@ -57,6 +59,11 @@ class HomeController(BaseController):
 
         self._cookies_manager.save_cookies_data(session_id, response)
         return response
+
+    @staticmethod
+    def clear_error():
+        session.pop(DataKeys.SESSION_ERROR_MESSAGE_KEY, None)
+        return "", 204
 
     def create_game(self):
         game_name = RequestDataManager.get_str(DataKeys.REQUEST_GAME_NAME_KEY)

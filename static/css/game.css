@@ -19,8 +19,10 @@
     --button-accept-background-hover: #b1cc8d;
     --button-accept-background-disabled: #e5edd2;
     --button-accept-border: #7f9b55;
+    --button-accept-border-hover: #729048;
     --button-accept-border-disabled: #cdddc2;
     --button-accept-foreground: #2f3e1c;
+    --button-accept-foreground-hover: #263516;
     --button-accept-foreground-disabled: #2f3e1c;
 
     --button-cancel-background: #e4b3a0;
@@ -147,26 +149,53 @@ select:focus {
  * --- CONTENT ---
  * -------------------------------------------------------------------------- */
 
-.game_info {
+.game-info {
+    align-items: flex-start;
     align-self: stretch;
     background: var(--footer-background);
     border-top: 1px solid var(--footer-border);
     border-bottom: 1px solid var(--footer-border);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: space-between;
     padding: 8px;
 }
 
-.game_info table {
+.game-info table {
     border-collapse: collapse;
     background: none;
 }
 
-.game_info td {
+.game-info td {
     background: none;
     border: none;
     font-size: 16px;
     margin: 0;
     padding: 0.25rem 0.4rem;
     text-align: left;
+}
+
+.game-players {
+    border-left: 1px solid var(--footer-border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 160px;
+    padding: 0 0 0 16px;
+}
+
+.game-players h4 {
+    margin: 0;
+
+}
+
+.game-players ul {
+    font-size: 0.8rem;
+    list-style-type: '👥 ';
+    margin: 0;
+    padding-left: 1.5rem;
 }
 
 .content {
@@ -267,6 +296,61 @@ select:focus {
     margin: 0;
     padding: 0.25rem 0.5rem 0.25rem 0;
     text-align: left;
+}
+
+.route-footer {
+    border-top: 1px solid var(--route-item-border);
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    padding: 8px 16px;
+}
+
+.checkbox-label {
+    align-items: center;
+    font-size: 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.checkbox-label input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    align-items: center;
+    border: 1px solid var(--button-accept-border);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    height: 24px;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    width: 24px;
+    transition: all 0.2s ease-in-out;
+}
+
+.checkbox-label input[type="checkbox"]:checked {
+    background-color: var(--button-accept-background-hover);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.3);
+}
+
+.checkbox-label input[type="checkbox"]:checked::after {
+    color: var(--button-accept-foreground);
+    content: '✔';
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1;
+    position: absolute;
+}
+
+.checkbox-label input[type="checkbox"]:focus,
+.checkbox-label input[type="checkbox"]:hover {
+    background-color: var(--button-accept-background-hover);
+    border: 1px solid var(--button-accept-border-hover);
+    outline: none;
 }
 
 /* --- CONTENT BUTTONS --- */
@@ -393,6 +477,7 @@ select:focus {
 
     .content {
         margin: 0 16px 16px 16px;
+
     }
 
     .content-buttons {

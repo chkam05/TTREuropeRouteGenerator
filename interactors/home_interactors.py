@@ -58,6 +58,8 @@ def join_game(data_container: DataContainer, game_name: str, nickname: str, lang
         game = data_container.get_game(game_name)
         game.add_player(player.nickname)
 
+        data_container.set_refresh(game_name, player.nickname)
+
         return InteractorResult(True, {
             DataKeys.SESSION_GAME_NAME_KEY: game.name,
             DataKeys.SESSION_NICKNAME_KEY: player.nickname

@@ -7,10 +7,12 @@ from core.models.point import Point
 class RouteWrapper:
     FIELD_GENERATED_ROUTE_KEY = 'generated_route'
     FIELD_IS_NEW_KEY = 'is_new'
+    FIELD_IS_COMPLETED = 'is_completed'
 
-    def __init__(self, generated_route: GenRoute, is_new = True):
+    def __init__(self, generated_route: GenRoute, is_new: bool = True, is_completed: bool = False):
         self._generated_route = generated_route
         self._is_new = is_new
+        self._is_completed = is_completed
 
     # region --- PROPERTIES ---
 
@@ -25,6 +27,14 @@ class RouteWrapper:
     @property
     def points(self) -> int:
         return self._generated_route.points
+
+    @property
+    def is_completed(self) -> bool:
+        return self._is_completed
+
+    @is_completed.setter
+    def is_completed(self, value: bool):
+        self._is_completed = value
 
     @property
     def is_new(self) -> bool:
@@ -59,13 +69,15 @@ class RouteWrapper:
 
         return cls(
             generated_route=GenRoute.from_dict(generated_route),
-            is_new=data.get(cls.FIELD_IS_NEW_KEY)
+            is_new=data.get(cls.FIELD_IS_NEW_KEY),
+            is_completed=data.get(cls.FIELD_IS_COMPLETED)
         )
 
     def to_dict(self) -> dict:
         return {
             self.FIELD_GENERATED_ROUTE_KEY: self._generated_route.to_dict(),
-            self.FIELD_IS_NEW_KEY: self._is_new
+            self.FIELD_IS_NEW_KEY: self._is_new,
+            self.FIELD_IS_COMPLETED: self._is_completed
         }
 
     # endregion
