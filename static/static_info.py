@@ -19,6 +19,12 @@ class StaticInfo:
     GAME_NICKNAME_KEY = 'nickname'
     GAME_PLAYERS_KEY = 'players'
 
+    SUMMARY_EXIT_KEY = 'exit'
+    SUMMARY_ROUTE_KEY = 'route'
+    SUMMARY_ROUTE_POINTS_KEY = 'route_points'
+    SUMMARY_ROUTE_TYPE_KEY = 'route_type'
+    SUMMARY_SUM_KEY = 'sum'
+
     FOOTER_TITLE_KEY = 'title'
     FOOTER_VERSION_KEY = 'version'
     FOOTER_COPYRIGHT_KEY = 'copyright'
@@ -71,6 +77,36 @@ class StaticInfo:
         }
     }
 
+    LABELS_DATA_MAP = {
+        LanguageKeys.LANG_EN_US: {
+            HEADER_TITLE_KEY: '🚂 Ticket to Ride Europe',
+        },
+        LanguageKeys.LANG_PL: {
+            HEADER_TITLE_KEY: '🚂 Wsiąść do Pociągu Europa',
+        }
+    }
+
+    LABELS_DATA_SUMMARY = {
+        LanguageKeys.LANG_EN_US: {
+            HEADER_TITLE_KEY: '🚂 Ticket to Ride Europe',
+            HEADER_SUBTITLE_KEY: 'Game summary: ',
+            SUMMARY_EXIT_KEY: 'Home Page',
+            SUMMARY_ROUTE_KEY: 'Route',
+            SUMMARY_ROUTE_POINTS_KEY: 'Points',
+            SUMMARY_ROUTE_TYPE_KEY: 'Type',
+            SUMMARY_SUM_KEY: 'Sum:'
+        },
+        LanguageKeys.LANG_PL: {
+            HEADER_TITLE_KEY: '🚂 Wsiąść do Pociągu Europa',
+            HEADER_SUBTITLE_KEY: 'Podsumowanie gry: ',
+            SUMMARY_EXIT_KEY: 'Strona Główna',
+            SUMMARY_ROUTE_KEY: 'Trasa',
+            SUMMARY_ROUTE_POINTS_KEY: 'Punkty',
+            SUMMARY_ROUTE_TYPE_KEY: 'Typ',
+            SUMMARY_SUM_KEY: 'Suma:'
+        }
+    }
+
     FOOTER_DATA = {
         LanguageKeys.LANG_EN_US: {
             FOOTER_TITLE_KEY: 'Ticket to Ride Europe - Routes Generator',
@@ -108,6 +144,14 @@ class StaticInfo:
     @classmethod
     def get_game_labels(cls, lang_key: str):
         return cls.LABELS_DATA_GAME.get(lang_key, cls.LABELS_DATA_GAME[LanguageKeys.LANG_EN_US])
+
+    @classmethod
+    def get_map_labels(cls, lang_key: str):
+        return cls.LABELS_DATA_MAP.get(lang_key, cls.LABELS_DATA_MAP[LanguageKeys.LANG_EN_US])
+
+    @classmethod
+    def get_summary_labels(cls, lang_key: str):
+        return cls.LABELS_DATA_SUMMARY.get(lang_key, cls.LABELS_DATA_SUMMARY[LanguageKeys.LANG_EN_US])
 
     @classmethod
     def get_footer(cls, lang_key: str):

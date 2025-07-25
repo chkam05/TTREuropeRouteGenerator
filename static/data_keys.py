@@ -26,6 +26,7 @@ class DataKeys:
     SESSION_PLAYERS_KEY = 'players'
     SESSION_ROUTE_PATH_KEY = 'route_path'
     SESSION_ROUTE_KEY = 'route'
+    SESSION_SUMMARY_DATA_KEY = 'summary_data'
 
     def __new__(cls, *args, **kwargs):
         raise TypeError(f"{cls.__name__} is a static class and cannot be instantiated.")

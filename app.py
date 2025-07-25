@@ -9,6 +9,7 @@ from controlers.base_controller import BaseController
 from controlers.game_controller import GameController
 from controlers.home_controller import HomeController
 from controlers.map_controller import MapController
+from controlers.summary_controller import SummaryController
 from models.data_container import DataContainer
 from models.ssh_keys import SshKeys
 from utils.cookies.cookies_manager import CookiesManager
@@ -60,7 +61,8 @@ class App:
         return [
             HomeController(self._cookies_manager, self._data),
             GameController(self._cookies_manager, self._data),
-            MapController(self._cookies_manager, self._data)
+            MapController(self._cookies_manager, self._data),
+            SummaryController(self._cookies_manager, self._data)
         ]
 
     def _register_plugins(self):

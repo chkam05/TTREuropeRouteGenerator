@@ -3,9 +3,11 @@ from typing import Optional, Dict, List
 from core.models.world_map import WorldMap
 from core.routes_generator import RoutesGenerator
 from models.game import Game
+from models.game_summary import GameSummary
 from models.player import Player
 from models.player_summary import PlayerSummary
-from static.language_keys import LanguageKeys
+from models.route_summary import RouteSummary
+from models.route_wrapper import RouteWrapper
 from utils.file_utils import FileUtils
 
 
@@ -19,11 +21,11 @@ class DataContainer:
                  games: Optional[Dict[str, Game]] = None,
                  players: Optional[Dict[str, Player]] = None,
                  refresh: Optional[Dict[str, bool]] = None,
-                 summary: Optional[Dict[str, List[PlayerSummary]]] = None):
+                 summary: Optional[Dict[str, GameSummary]] = None):
         self._games: Dict[str, Game] = games if games else {}
         self._players: Dict[str, Player] = players if players else {}
         self._refresh: Dict[str, bool] = refresh if refresh else {}
-        self._summary: Dict[str, List[PlayerSummary]] = summary if summary else {}
+        self._summary: Dict[str, GameSummary] = summary if summary else {}
 
         self._generator = RoutesGenerator(WorldMap.create_default())
 
@@ -55,14 +57,13 @@ class DataContainer:
     def from_dict(cls, data: dict) -> 'DataContainer':
         games = data.get(cls.FIELD_GAMES_KEY, {})
         players = data.get(cls.FIELD_PLAYERS_KEY, {})
-        summary = data.get(cls.FIELD_SUMMARY_KEY, {})
+        summaries = data.get(cls.FIELD_SUMMARY_KEY, {})
 
         return cls(
             games={game_name: Game.from_dict(game) for game_name, game in games.items()},
             players={nickname: Player.from_dict(player) for nickname, player in players.items()},
             refresh=data.get(cls.FIELD_REFRESH_KEY, {}),
-            summary={nickname: [PlayerSummary.from_dict(s) for s in summaries]
-                     for nickname, summaries in summary.items()}
+            summary={nickname: GameSummary.from_dict(s) for nickname, s in summaries.items()}
         )
 
     @classmethod
@@ -76,12 +77,13 @@ class DataContainer:
     def to_dict(self) -> dict:
         games = {game_name: game.to_dict() for game_name, game in self._games.items()}
         players = {nickname: player.to_dict() for nickname, player in self._players.items()}
-        summary = {nickname: [s.to_dict() for s in summaries] for nickname, summaries in self._summary.items()}
+        summaries = {nickname: s.to_dict() for nickname, s in self._summary.items()}
 
         return {
             self.FIELD_GAMES_KEY: games,
             self.FIELD_PLAYERS_KEY: players,
-            self.FIELD_REFRESH_KEY: self._refresh
+            self.FIELD_REFRESH_KEY: self._refresh,
+            self.FIELD_SUMMARY_KEY: summaries,
         }
 
     def save_to_file(self, file_path: str):
@@ -105,6 +107,7 @@ class DataContainer:
     def end_game(self, game_name: str, player: Player) -> Optional[Game]:
         if self.is_host(game_name, player):
             game = self.get_game(game_name)
+            self.create_summary(game.name, game.routes_per_player)
             del self._games[game_name]
             return game
         return None
@@ -147,6 +150,21 @@ class DataContainer:
 
     # region --- SUMMARY ---
 
+    def create_summary(self, game_name: str, routes_per_player: Dict[str, List[RouteWrapper]]):
+        player_summaries = {}
 
+        for nickname, routes in routes_per_player.items():
+            route_summaries = [RouteSummary(r.city_a, r.city_b, r.points, r.is_primary, r.is_completed)
+                               for r in routes]
+            player_summaries[nickname] = PlayerSummary(nickname, route_summaries)
+
+        summary = GameSummary(game_name, player_summaries)
+        self._summary[game_name] = summary
+
+    def get_summary(self, game_name: str) -> Optional[GameSummary]:
+        return self._summary[game_name] if self.has_summary(game_name) else None
+
+    def has_summary(self, game_name: str) -> bool:
+        return game_name in self._summary
 
     # endregion

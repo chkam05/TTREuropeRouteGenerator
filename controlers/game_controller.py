@@ -55,6 +55,10 @@ class GameController(BaseController):
         return redirect(url_for(Redirections.MAP))
 
     @staticmethod
+    def _redirect_summary():
+        return redirect(url_for(Redirections.SUMMARY))
+
+    @staticmethod
     def _redirect_itself():
         return redirect(url_for(Redirections.GAME))
 
@@ -129,7 +133,8 @@ class GameController(BaseController):
         result = end_game(self._data_container, game_name, nickname, self._get_language())
 
         if result.success:
-            return self._redirect_home()
+            session[DataKeys.SESSION_GAME_DATA_KEY] = result.get(DataKeys.SESSION_GAME_DATA_KEY)
+            return self._redirect_summary()
         else:
             session[DataKeys.SESSION_ERROR_MESSAGE_KEY] = result.error
             return self._redirect_home()

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{ labels_data.title }} - {{ labels_data.subtitle }}{{ summary_data.game_name }}</title>
+        <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/summary.css') }}">
+    </head>
+
+    <body>
+        <div class="container-wrapper">
+            <div class="special-header">
+                <form method="POST" action="/summary/set_language">
+                    <select name="language" id="language" onchange="this.form.submit()">
+                        {% for language in languages %}
+                            <option value="{{ language }}" {% if selected_language == language %}selected{% endif %}>
+                                {{ language }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+
+            <div class="container">
+                <div class="container-inner">
+                    <div class="header">
+                        <h1>{{ labels_data.title }}</h1>
+                        <h2>{{ labels_data.subtitle }}{{ summary_data.game_name }}</h2>
+                    </div>
+
+                    <div class="content">
+                        <div class="content-summary">
+                            {% for nickname, summary in summary_data.player_summaries.items() %}
+                            <div class="player-item">
+                                <div class="player-header {% if nickname == summary_data.winner %}player-header-win{% endif %}">
+                                    <h3>👤 {{ nickname }}</h3>
+                                    <h3>🏆</h3>
+                                </div>
+
+                                <div class="route-content">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>{{ labels_data.route_type }}</th>
+                                                <th>{{ labels_data.route }}</th>
+                                                <th>{{ labels_data.route_points }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for route in summary.routes %}
+                                            <tr class="{% if not route.is_completed %}route-failed{% endif %}">
+                                                <td>{% if route.is_primary %}🚂{% else %}🚃{% endif %}</td>
+                                                <td>{{ route.city_a }} → {{ route.city_b }}</td>
+                                                <td>{% if not route.is_completed %}-{% endif %}{{ route.points }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                            <tr>
+                                                <td></td>
+                                                <td style="text-align: right; padding: 0.25rem 0">{{ labels_data.sum }}</td>
+                                                <td>{{ summary.points }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <form method="post" action="/summary/exit">
+                            <button type="submit">{{ labels_data.exit }}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer">
+                <p>{{ footer_data.title }}<br/>{{ footer_data.version }}<br/>{{ footer_data.copyright }}<br/>
+                {{ footer_data.licence }}</p>
+                <p>{{ footer_data.legal_notice }}</p>
+            </div>
+        </div>
+
+        <script src="{{ url_for('static', filename='js/background_generator.js') }}"></script>
+    </body>
+</html>

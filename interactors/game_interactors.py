@@ -140,10 +140,8 @@ def end_game(data_container: DataContainer, game_name: str, nickname: str, langu
         if not data_container.is_host(game_name, player):
             raise Exception(Translations.get_error(ErrorKeys.ERROR_END_GAME_PERMISSIONS, language))
 
-        game_data = data_container.end_game(game_name, player)
-        return InteractorResult(True, {
-            DataKeys.SESSION_GAME_DATA_KEY: game_data
-        })
+        data_container.end_game(game_data.name, player)
+        return InteractorResult(True)
     except Exception as e:
         return InteractorResult(False, error=str(e))
 
@@ -177,12 +175,15 @@ def game_exists(data_container: DataContainer,
             response_data[DataKeys.RESPONSE_SHOULD_REFRESH_KEY] = data_container.have_refresh(nickname)
             return InteractorResult(True, response_data)
 
-        game_data = data_container.get_game(game_name)
         player = data_container.get_player(nickname)
 
-        # if game_data in summary_data:
-        #     response_data[DataKeys.RESPONSE_SUMMARY_EXISTS_KEY] = True
-        #     return InteractorResult(True, response_data)
+        if not data_container.has_player(nickname):
+            raise Exception(Translations.get_error(
+                ErrorKeys.ERROR_PLAYER_NOT_EXISTS, language, nickname))
+
+        if data_container.has_summary(game_name):
+            response_data[DataKeys.RESPONSE_SUMMARY_EXISTS_KEY] = True
+            return InteractorResult(True, response_data)
 
         raise Exception(Translations.get_error(ErrorKeys.ERROR_GAME_ENDED, language, game_name))
     except Exception as e:
